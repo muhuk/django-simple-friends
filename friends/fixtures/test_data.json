@@ -1,0 +1,149 @@
+[
+  {
+    "pk": 1,
+    "model": "auth.user",
+    "fields": {
+      "username": "testuser1",
+      "first_name": "",
+      "last_name": "",
+      "is_active": true,
+      "is_superuser": false,
+      "is_staff": false,
+      "last_login": "2009-09-11 01:06:00",
+      "groups": [],
+      "user_permissions": [],
+      "password": "sha1$d2d66$3319eb2ffa9a37a78cf29275b0d5b05418994005",
+      "email": "testuser1@example.com",
+      "date_joined": "2009-09-11 01:06:00"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "auth.user",
+    "fields": {
+      "username": "testuser2",
+      "first_name": "",
+      "last_name": "",
+      "is_active": true,
+      "is_superuser": false,
+      "is_staff": false,
+      "last_login": "2009-09-11 01:08:19",
+      "groups": [],
+      "user_permissions": [],
+      "password": "sha1$9ead3$51b082b4737a6bb0ca103eb25ed4f6aaa1953a43",
+      "email": "testuser2@example.com",
+      "date_joined": "2009-09-11 01:08:19"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "auth.user",
+    "fields": {
+      "username": "testuser3",
+      "first_name": "",
+      "last_name": "",
+      "is_active": true,
+      "is_superuser": false,
+      "is_staff": false,
+      "last_login": "2009-09-11 01:09:51",
+      "groups": [],
+      "user_permissions": [],
+      "password": "sha1$6fd7b$ba3c6df4a57970d6d6a746237bebb964fa222f8a",
+      "email": "testuser3@example.com",
+      "date_joined": "2009-09-11 01:09:51"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "auth.user",
+    "fields": {
+      "username": "testuser4",
+      "first_name": "",
+      "last_name": "",
+      "is_active": true,
+      "is_superuser": false,
+      "is_staff": false,
+      "last_login": "2009-09-11 01:15:14",
+      "groups": [],
+      "user_permissions": [],
+      "password": "sha1$719cc$84f299bc0e21b55c85a72fdf3261102b0c7bbb66",
+      "email": "testuser4@example.com",
+      "date_joined": "2009-09-11 01:15:14"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "friends.friendshiprequest",
+    "fields": {
+      "to_user": 2,
+      "message": "",
+      "created": "2009-09-10",
+      "accepted": true,
+      "from_user": 1
+    }
+  },
+  {
+    "pk": 1,
+    "model": "friends.friendship",
+    "fields": {
+      "friends": [2],
+      "user": 1
+    }
+  },
+  {
+    "pk": 2,
+    "model": "friends.friendship",
+    "fields": {
+      "friends": [1],
+      "user": 2
+    }
+  },
+  {
+    "pk": 3,
+    "model": "friends.friendship",
+    "fields": {
+      "friends": [],
+      "user": 3
+    }
+  },
+  {
+    "pk": 4,
+    "model": "friends.friendship",
+    "fields": {
+      "friends": [],
+      "user": 4
+    }
+  },
+  {
+    "pk": 1,
+    "model": "friends.userblocks",
+    "fields": {
+      "blocks": [],
+      "user": 1
+    }
+  },
+  {
+    "pk": 2,
+    "model": "friends.userblocks",
+    "fields": {
+      "blocks": [],
+      "user": 2
+    }
+  },
+  {
+    "pk": 3,
+    "model": "friends.userblocks",
+    "fields": {
+      "blocks": [],
+      "user": 3
+    }
+  },
+  {
+    "pk": 4,
+    "model": "friends.userblocks",
+    "fields": {
+      "blocks": [],
+      "user": 4
+    }
+  }
+]
