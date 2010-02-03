@@ -43,7 +43,7 @@ def add_to_friends(parser, token):
 
 class AddToFriendsNode(template.Node):
     def __init__(self, target_user, current_user='user',
-                       template_name='friends/includes/add_to_friends.html'):
+                       template_name='friends/_add_to.html'):
         self.target_user = template.Variable(target_user)
         self.current_user = template.Variable(current_user)
         self.template_name = template_name
@@ -89,7 +89,7 @@ def block_user(parser, token):
 
 class BlockUserLinkNode(template.Node):
     def __init__(self, target_user, current_user='user',
-                       template_name='friends/includes/block_user.html'):
+                       template_name='friends/_block.html'):
         self.target_user = template.Variable(target_user)
         self.current_user = template.Variable(current_user)
         self.template_name = template_name
