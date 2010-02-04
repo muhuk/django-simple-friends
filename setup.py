@@ -1,9 +1,27 @@
+from __future__ import with_statement
+import os
 from distutils.core import setup
 from friends import __version__, __maintainer__, __email__
 
 
 license_text = open('LICENSE.txt').read()
 long_description = open('README.rst').read()
+
+
+PACKAGE_DATA = ['fixtures/*.json', 'locale/*/LC_MESSAGES/django.po']
+DATA_FILES = ['LICENSE.txt', 'README.rst']
+
+
+def remove_if_exists(path):
+    if os.path.exists(path) and os.path.isfile(path):
+        os.remove(path)
+
+
+remove_if_exists('MANIFEST')
+with open('MANIFEST.in', 'w') as manifest_in:
+    manifest_in.write('\n'.join('include %s' % l for l in DATA_FILES) + '\n')
+    manifest_in.write(
+             '\n'.join('include friends/%s' % l for l in PACKAGE_DATA) + '\n')
 
 
 setup(
@@ -13,7 +31,9 @@ setup(
     author = __maintainer__.encode('utf8'),
     author_email = __email__,
     license = license_text,
-    packages = ['friends'],
+    packages = ['friends', 'friends.templatetags'],
+    package_data= {'friends': PACKAGE_DATA},
+    data_files=[('', DATA_FILES)],
     description = 'Like django-friends, but simpler',
     long_description=long_description,
     classifiers = ['Development Status :: 5 - Production/Stable',
@@ -23,3 +43,7 @@ setup(
                    'License :: OSI Approved :: BSD License',
                    'Topic :: Internet :: WWW/HTTP :: Dynamic Content']
 )
+
+
+remove_if_exists('MANIFEST')
+remove_if_exists('MANIFEST.in')
