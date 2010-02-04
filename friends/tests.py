@@ -71,8 +71,8 @@ class FriendshipViewsTestCase(BaseTestCase):
                                to_user=self.user3, accepted=False).count(), 1)
 
     def test_friendship_accept(self):
-        friendship = FriendshipRequest.objects.create(from_user=self.user1,
-                                                      to_user=self.user3)
+        FriendshipRequest.objects.create(from_user=self.user1,
+                                         to_user=self.user3)
         self.client.login(username='testuser3', password='testuser3')
         self.client.get(reverse('friendship_accept', args=('testuser1',)))
         self.assertEqual(FriendshipRequest.objects.filter(
@@ -81,8 +81,8 @@ class FriendshipViewsTestCase(BaseTestCase):
                                                         self.user3), True)
 
     def test_friendship_cancel(self):
-        friendship = FriendshipRequest.objects.create(from_user=self.user1,
-                                                      to_user=self.user3)
+        FriendshipRequest.objects.create(from_user=self.user1,
+                                         to_user=self.user3)
         self.client.login(username='testuser1', password='testuser1')
         self.client.get(reverse('friendship_cancel', args=('testuser3',)))
         self.assertEqual(FriendshipRequest.objects.filter(
@@ -91,8 +91,8 @@ class FriendshipViewsTestCase(BaseTestCase):
                                                         self.user3), False)
 
     def test_friendship_decline(self):
-        friendship = FriendshipRequest.objects.create(from_user=self.user1,
-                                                      to_user=self.user3)
+        FriendshipRequest.objects.create(from_user=self.user1,
+                                         to_user=self.user3)
         self.client.login(username='testuser3', password='testuser3')
         self.client.get(reverse('friendship_decline', args=('testuser1',)))
         self.assertEqual(FriendshipRequest.objects.filter(
@@ -113,7 +113,8 @@ class FriendshipViewsTestCase(BaseTestCase):
                                                         self.user3), False)
         self.client.login(username='testuser3', password='testuser3')
         self.client.get(reverse('friendship_request', args=('testuser1',)))
-        self.assertEqual(FriendshipRequest.objects.filter(from_user=self.user1, to_user=self.user3, accepted=True).count(), 1)
+        self.assertEqual(FriendshipRequest.objects.filter(from_user=self.user1,
+                                to_user=self.user3, accepted=True).count(), 1)
         self.assertEqual(Friendship.objects.are_friends(self.user1,
                                                         self.user3), True)
 

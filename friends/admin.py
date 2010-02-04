@@ -15,13 +15,11 @@ class FriendshipRequestAdmin(admin.ModelAdmin):
     accept_friendship.short_description = _(u'Accept selected friendship ' \
                                             u'requests')
 
-
     def decline_friendship(self, request, queryset):
         for friendship_request in queryset:
             friendship_request.decline()
     decline_friendship.short_description = _(u'Decline selected friendship ' \
                                              u'requests')
-
 
     def cancel_friendship(self, request, queryset):
         for friendship_request in queryset:

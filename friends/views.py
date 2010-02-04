@@ -1,14 +1,12 @@
-from django.core.paginator import Paginator, InvalidPage
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
 from django.db import IntegrityError, transaction
-from django.conf import settings
 from django.views.generic.list_detail import object_list
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext
-from django.template import RequestContext
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from models import FriendshipRequest, Friendship
+from app_settings import REDIRECT_FALLBACK_TO_PROFILE
 
 
 def limit_to_others(f):
@@ -30,7 +28,7 @@ def apply_redirect_to(f):
         elif 'redirect_to' in request.REQUEST:
             redirect_to = request.REQUEST['next']
         else:
-            if getattr(settings,'FRIENDS_REDIRECT_FALLBACK_TO_PROFILE',False):
+            if REDIRECT_FALLBACK_TO_PROFILE:
                 redirect_to = request.user.get_profile().get_absolute_url()
             else:
                 redirect_to = request.META.get('HTTP_REFERER', '/')
@@ -74,7 +72,7 @@ def friend_list(request,
                                        from_user=request.user, accepted=False)
     extra_context['target_user'] = user
     extra_context['friendship_requests'] = {'incoming': incoming_requests,
-                                            'outgoing': outgoing_requests }
+                                            'outgoing': outgoing_requests}
     extra_context['user_blocks'] = request.user.user_blocks.blocks.all()
     return object_list(request,
                        queryset=friends,
@@ -93,8 +91,9 @@ def friend_list(request,
 @transaction.commit_manually
 def friendship_request(request, username, redirect_to, other_user, **kwargs):
     try:
-        reverse_invitation = FriendshipRequest.objects.get(
-                                   from_user=other_user, to_user=request.user)
+        # Check if the other user have already requested friendship
+        FriendshipRequest.objects.get(from_user=other_user,
+                                      to_user=request.user)
     except FriendshipRequest.DoesNotExist:
         pass
     else:
@@ -103,9 +102,9 @@ def friendship_request(request, username, redirect_to, other_user, **kwargs):
         return result
     request_message = request.REQUEST.get('message', u'')
     try:
-        friendship = FriendshipRequest.objects.create(from_user=request.user,
-                                                      to_user=other_user,
-                                                      message=request_message)
+        FriendshipRequest.objects.create(from_user=request.user,
+                                         to_user=other_user,
+                                         message=request_message)
     except IntegrityError:
         transaction.rollback()
         message = ugettext(u'You already have an active friend ' \
@@ -127,10 +126,9 @@ def friendship_accept(request, username, redirect_to, other_user, **kwargs):
 
 
 def _friendship_accept(from_user, to_user, redirect_to):
-    friendship_request_ = get_object_or_404(FriendshipRequest,
-                                            from_user=from_user,
-                                            to_user=to_user)
-    friendship = friendship_request_.accept()
+    get_object_or_404(FriendshipRequest,
+                      from_user=from_user,
+                      to_user=to_user).accept()
     message = ugettext(u'You are now friends with %(user)s.')
     to_user.message_set.create(message=message % {
                      'user': from_user.get_full_name() or from_user.username})
@@ -144,10 +142,9 @@ def _friendship_accept(from_user, to_user, redirect_to):
 @apply_redirect_to
 @apply_other_user
 def friendship_decline(request, username, redirect_to, other_user, **kwargs):
-    friendship_request_ = get_object_or_404(FriendshipRequest,
-                                            from_user=other_user,
-                                            to_user=request.user)
-    friendship = friendship_request_.decline()
+    get_object_or_404(FriendshipRequest,
+                      from_user=other_user,
+                      to_user=request.user).decline()
     message = ugettext(u'You declined friendship request of %(user)s.')
     request.user.message_set.create(message=message % {
                    'user': other_user.get_full_name() or other_user.username})
@@ -162,10 +159,9 @@ def friendship_decline(request, username, redirect_to, other_user, **kwargs):
 @apply_redirect_to
 @apply_other_user
 def friendship_cancel(request, username, redirect_to, other_user, **kwargs):
-    friendship_request_ = get_object_or_404(FriendshipRequest,
-                                            from_user=request.user,
-                                            to_user=other_user)
-    friendship = friendship_request_.cancel()
+    get_object_or_404(FriendshipRequest,
+                      from_user=request.user,
+                      to_user=other_user).cancel()
     message = ugettext(u'You cancelled your request to be friends ' \
                        u'with %(user)s.')
     request.user.message_set.create(message=message % {
