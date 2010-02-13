@@ -4,7 +4,7 @@ __credits__ = [u'Atamert \xd6l\xe7gen']
 
 
 __license__ = 'BSD'
-__version__ = '0.4'
+__version__ = '0.5'
 __maintainer__ = u'Atamert \xd6l\xe7gen'
 __email__ = 'muhuk@muhuk.com'
 __status__ = 'Production'
