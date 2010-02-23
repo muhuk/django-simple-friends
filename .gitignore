@@ -1,0 +1,7 @@
+*.egg-info
+*.py[oc]
+*.mo
+*.db
+cache/
+*.kdevelop
+*.kdevses
