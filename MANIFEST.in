@@ -1,0 +1,4 @@
+include LICENSE.txt
+include README.rst
+recursive-include friends/fixtures *.json
+recursive-include friends/locale/*/LC_MESSAGES *.po *.mo
