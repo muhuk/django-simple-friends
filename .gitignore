@@ -3,5 +3,6 @@
 *.mo
 *.db
 cache/
+MANIFEST
 *.kdevelop
 *.kdevses
