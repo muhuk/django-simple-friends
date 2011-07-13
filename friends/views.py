@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from models import FriendshipRequest, Friendship
+from models import FriendshipRequest, Friendship, UserBlocks
 from app_settings import REDIRECT_FALLBACK_TO_PROFILE
 
 
@@ -73,7 +73,13 @@ def friend_list(request,
     extra_context['target_user'] = user
     extra_context['friendship_requests'] = {'incoming': incoming_requests,
                                             'outgoing': outgoing_requests}
-    extra_context['user_blocks'] = request.user.user_blocks.blocks.all()
+    try:
+        user_blocks = request.user.user_blocks
+    except UserBlocks.DoesNotExist:
+        extra_context['user_blocks'] = []
+    else:
+        extra_context['user_blocks'] = user_blocks.blocks.all()
+
     return object_list(request,
                        queryset=friends,
                        paginate_by=paginate_by,
