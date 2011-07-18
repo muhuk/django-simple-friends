@@ -47,15 +47,25 @@ class FriendshipManager(models.Manager):
 
     def are_friends(self, user1, user2):
         return bool(Friendship.objects.get(user=user1).friends.filter(
-                                                          user=user2).count())
+                                                          user=user2).exists())
 
     def befriend(self, user1, user2):
         Friendship.objects.get(user=user1).friends.add(
                                            Friendship.objects.get(user=user2))
+        # Now that user1 accepted user2's friend request we should delete any
+        # request by user1 to user2 so that we don't have ambiguous data
+        FriendshipRequest.objects.filter(from_user=user1,
+                                         to_user=user2).delete()
 
     def unfriend(self, user1, user2):
+        # Break friendship link between users
         Friendship.objects.get(user=user1).friends.remove(
                                            Friendship.objects.get(user=user2))
+        # Delete FriendshipRequest's as well
+        FriendshipRequest.objects.filter(from_user=user1,
+                                         to_user=user2).delete()
+        FriendshipRequest.objects.filter(from_user=user2,
+                                         to_user=user1).delete()
 
 
 class Friendship(models.Model):
