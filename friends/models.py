@@ -113,19 +113,12 @@ class UserBlocks(models.Model):
     block_summary.short_description = _(u'Summary of blocks')
 
 
-def create_friendship_instance(sender, instance, created, raw, **kwargs):
-    if created and not raw:
-        Friendship.objects.create(user=instance)
-models.signals.post_save.connect(create_friendship_instance,
+# Signal connections
+models.signals.post_save.connect(signals.create_friendship_instance,
                                  sender=User,
-                                 dispatch_uid='friends.models.create_' \
+                                 dispatch_uid='friends.signals.create_' \
                                               'friendship_instance')
-
-
-def create_userblocks_instance(sender, instance, created, raw, **kwargs):
-    if created and not raw:
-        UserBlocks.objects.create(user=instance)
-models.signals.post_save.connect(create_userblocks_instance,
+models.signals.post_save.connect(signals.create_userblocks_instance,
                                  sender=User,
-                                 dispatch_uid='friends.models.create_' \
+                                 dispatch_uid='friends.signals.create_' \
                                               'userblocks_instance')
