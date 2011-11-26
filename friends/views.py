@@ -1,3 +1,21 @@
+"""
+.. autofunction:: friend_list
+
+.. autofunction:: friendship_request
+
+.. autofunction:: friendship_accept
+
+.. autofunction:: friendship_decline
+
+.. autofunction:: friendship_cancel
+
+.. autofunction:: friendship_delete
+
+.. autofunction:: block_user
+
+.. autofunction:: unblock_user
+"""
+
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404
 from django.db import IntegrityError, transaction
 from django.views.generic.list_detail import object_list

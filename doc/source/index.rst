@@ -9,6 +9,7 @@ Contents:
 
    about
    install
+   modules
 
 
 Indices and tables

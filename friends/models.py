@@ -1,3 +1,18 @@
+"""
+.. autoclass:: FriendshipRequest
+    :members:
+
+.. autoclass:: FriendshipManager
+    :members:
+
+.. autoclass:: Friendship
+    :members:
+
+.. autoclass:: UserBlocks
+    :members:
+"""
+
+
 import datetime
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
