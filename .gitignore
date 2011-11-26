@@ -3,6 +3,8 @@
 *.mo
 *.db
 cache/
+doc/build/
 MANIFEST
 *.kdevelop
 *.kdevses
+*.sqlite
