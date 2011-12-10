@@ -59,6 +59,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # 'django.contrib.admindocs',
     'friends',
+    'django_coverage',
 )
 
 LOGGING = {
@@ -78,3 +79,6 @@ LOGGING = {
         },
     }
 }
+
+COVERAGE_USE_CACHE = True
+COVERAGE_PATH_EXCLUDES = ["fixtures", "locale"]

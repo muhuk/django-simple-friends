@@ -1,10 +1,10 @@
+/doc/build/
+*.db
+.coverage
 *.egg-info
 *.py[oc]
 *.mo
-*.db
-cache/
-doc/build/
-MANIFEST
 *.kdevelop
 *.kdevses
+MANIFEST
 *.sqlite
