@@ -35,7 +35,50 @@ command of your projects. Example project is intended for developers.
 Usage
 =====
 
-TODO
+Usage examples.
+
+First, we're going to get two different users for our examples::
+
+     user1 = User.objects.get(id=1)
+     user2 = User.objects.get(id=2)
+
+Friend request
+--------------
+
+``user1`` requests friendship to ``user2``::
+
+     FriendshipRequest.objects.create(from_user=user1, to_user=user2, message='Friends?')
+
+Accepting friendship request
+----------------------------
+
+``user2`` accepts ``user1`` request::
+
+    fr = FriendshipRequest.objects.get(from_user=user1, to_user=user2, accepted=False)
+    fr.accept()
+
+Declining friendship request
+----------------------------
+
+``user2`` declines ``user1`` request::
+
+    fr = FriendshipRequest.objects.get(from_user=user1, to_user=user2, accepted=False)
+    fr.decline()
+
+
+Are we friends?
+---------------
+
+If users are friends then return ``True``::
+
+    Friendship.objects.are_friends(user1, user2):
+
+Getting all friends of a user
+-----------------------------
+
+``friends`` will be a list with all id's from ``user1`` friends::
+
+    friends = [f.id for f in Friendship.objects.friends_of(user1)]
 
 
 See Also
