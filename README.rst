@@ -78,7 +78,7 @@ Getting all friends of a user
 
 ``friends`` will be a list with all id's from ``user1`` friends::
 
-    friends = [f.id for f in Friendship.objects.friends_of(user1)]
+    friends = Friendship.objects.friends_of(user1).values_list('id', flat=True)
 
 
 See Also
