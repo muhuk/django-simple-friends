@@ -124,13 +124,13 @@ class UserBlocksViewsTestCase(BaseTestCase):
 
     def test_block(self):
         self.client.login(username='testuser1', password='testuser1')
-        self.client.get(reverse('block_user', args=('testuser2',)))
+        self.client.get(reverse('user_block', args=('testuser2',)))
         self.assertEqual(self.user2 in self.user1.user_blocks.blocks.all(),
                                                                          True)
 
     def test_unblock(self):
         self.user1.user_blocks.blocks.add(self.user2)
         self.client.login(username='testuser1', password='testuser1')
-        self.client.get(reverse('unblock_user', args=('testuser2',)))
+        self.client.get(reverse('user_unblock', args=('testuser2',)))
         self.assertEqual(self.user2 in self.user1.user_blocks.blocks.all(),
                                                                         False)
