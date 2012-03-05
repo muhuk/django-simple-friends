@@ -17,7 +17,7 @@
 """
 
 from django.http import HttpResponseBadRequest, Http404
-from django.db import IntegrityError, transaction
+from django.db import transaction
 from django.views.generic.base import RedirectView
 from django.views.generic.list_detail import object_list
 from django.shortcuts import get_object_or_404
@@ -101,115 +101,56 @@ class FriendshipAcceptView(BaseFriendshipActionView):
         get_object_or_404(FriendshipRequest,
                           from_user=from_user,
                           to_user=to_user).accept()
-        message = ugettext(u'You are now friends with %(user)s.')
-        to_user.message_set.create(message=message % {
-                      'user': from_user.get_full_name() or from_user.username})
-        from_user.message_set.create(message=message % {
-                          'user': to_user.get_full_name() or to_user.username})
 
     def action(self, request, user, **kwargs):
-        other_user = user
-        self.accept_friendship(other_user, request.user)
+        self.accept_friendship(user, request.user)
 
 
 class FriendshipRequestView(FriendshipAcceptView):
     @transaction.commit_on_success
     def action(self, request, user, **kwargs):
-        other_user = user
-        if Friendship.objects.are_friends(request.user, other_user):
-            message = ugettext(u'You are already friends with %(user)s')
-            request.user.message_set.create(message=message % {
-                   'user': other_user.get_full_name() or other_user.username})
-            raise RuntimeError
+        if Friendship.objects.are_friends(request.user, user):
+            raise RuntimeError('%r amd %r are already friends' % \
+                                                          (request.user, user))
         try:
-            # Check if the other user have already requested friendship
-            self.accept_friendship(other_user, request.user)
+            # If there's a friendship request from the other user accept it.
+            self.accept_friendship(user, request.user)
         except Http404:
-            pass
-
-        request_message = request.REQUEST.get('message', u'')
-        try:
+            request_message = request.REQUEST.get('message', u'')
+            # If we already have an active friendship request IntegrityError
+            # will be raised and the transaction will be rolled back.
             FriendshipRequest.objects.create(from_user=request.user,
-                                            to_user=other_user,
-                                            message=request_message)
-        except IntegrityError:
-            transaction.rollback()
-            message = ugettext(u'You already have an active friend ' \
-                                                   u'invitation for %(user)s.')
-        else:
-            message = ugettext(u'You have requested to be ' \
-                                                     u'friends with %(user)s.')
-        request.user.message_set.create(message=message % {
-                    'user': other_user.get_full_name() or other_user.username})
+                                             to_user=user,
+                                             message=request_message)
 
 
 class FriendshipDeclineView(BaseFriendshipActionView):
     def action(self, request, user, **kwargs):
-        other_user = user
         get_object_or_404(FriendshipRequest,
-                          from_user=other_user,
+                          from_user=user,
                           to_user=request.user).decline()
-        message = ugettext(u'You declined friendship request of %(user)s.')
-        request.user.message_set.create(message=message % {
-                    'user': other_user.get_full_name() or other_user.username})
-        message = ugettext(u'%(user)s has declined your friendship request.')
-        other_user.message_set.create(message=message % {
-                'user': request.user.get_full_name() or request.user.username})
 
 
 class FriendshipCancelView(BaseFriendshipActionView):
     def action(self, request, user, **kwargs):
-        other_user = user
         get_object_or_404(FriendshipRequest,
                           from_user=request.user,
-                          to_user=other_user).cancel()
-        message = ugettext(u'You cancelled your request to be friends ' \
-                          u'with %(user)s.')
-        request.user.message_set.create(message=message % {
-                    'user': other_user.get_full_name() or other_user.username})
+                          to_user=user).cancel()
 
 
 class FriendshipDeleteView(BaseFriendshipActionView):
     def action(self, request, user, **kwargs):
-        other_user = user
-        if Friendship.objects.are_friends(request.user, other_user) is False:
-            raise Http404('You are not friends with %s.' % \
-                          (other_user.get_full_name() or other_user.username,))
-        Friendship.objects.unfriend(request.user, other_user)
-        message = ugettext(u'You are no longer friends with %(user)s.')
-        request.user.message_set.create(message=message % {
-                    'user': other_user.get_full_name() or other_user.username})
-        message = ugettext(u'%(user)s has removed you as a friend.')
-        other_user.message_set.create(message=message % {
-                'user': request.user.get_full_name() or request.user.username})
+        Friendship.objects.unfriend(request.user, user)
 
 
 class FriendshipBlockView(BaseFriendshipActionView):
     def action(self, request, user, **kwargs):
-        other_user = user
-        try:
-            request.user.user_blocks.blocks.get(pk=other_user.pk)
-        except User.DoesNotExist:
-            request.user.user_blocks.blocks.add(other_user)
-            message = ugettext(u'You have blocked %(user)s.')
-        else:
-            message = ugettext(u'%(user)s is already blocked.')
-        request.user.message_set.create(message=message % {
-                    'user': other_user.get_full_name() or other_user.username})
+        request.user.user_blocks.blocks.add(user)
 
 
 class FriendshipUnblockView(BaseFriendshipActionView):
     def action(self, request, user, **kwargs):
-        other_user = user
-        try:
-            request.user.user_blocks.blocks.get(pk=other_user.pk)
-        except User.DoesNotExist:
-            message = ugettext(u'%(user)s was not blocked.')
-        else:
-            request.user.user_blocks.blocks.remove(other_user)
-            message = ugettext(u'You have unblocked %(user)s.')
-        request.user.message_set.create(message=message % {
-                    'user': other_user.get_full_name() or other_user.username})
+        request.user.user_blocks.blocks.remove(user)
 
 
 friendship_request = login_required(FriendshipRequestView.as_view())
