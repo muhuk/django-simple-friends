@@ -11,9 +11,9 @@
 
 .. autofunction:: friendship_delete
 
-.. autofunction:: block_user
+.. autofunction:: user_block
 
-.. autofunction:: unblock_user
+.. autofunction:: user_unblock
 """
 
 from django.http import HttpResponseBadRequest, Http404
@@ -217,5 +217,5 @@ friendship_accept = login_required(FriendshipAcceptView.as_view())
 friendship_decline = login_required(FriendshipDeclineView.as_view())
 friendship_cancel = login_required(FriendshipCancelView.as_view())
 friendship_delete = login_required(FriendshipDeleteView.as_view())
-block_user = login_required(FriendshipBlockView.as_view())
-unblock_user = login_required(FriendshipUnblockView.as_view())
+user_block = login_required(FriendshipBlockView.as_view())
+user_unblock = login_required(FriendshipUnblockView.as_view())
