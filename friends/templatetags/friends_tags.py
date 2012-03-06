@@ -7,22 +7,6 @@ register = template.Library()
 
 
 @register.tag
-def friends_of(parser, token):
-    tag_name, user_var = token.split_contents()
-    return FriendsOfNode(user_var)
-
-
-class FriendsOfNode(template.Node):
-    def __init__(self, user_var):
-        self.user_var = template.Variable(user_var)
-
-    def render(self, context):
-        user = self.user_var.resolve(context)
-        context.update({'friends': Friendship.objects.friends_of(user, True)})
-        return u''
-
-
-@register.tag
 def add_to_friends(parser, token):
     bits = token.split_contents()
     tag_name, bits = bits[0], bits[1:]
@@ -68,6 +52,35 @@ class AddToFriendsNode(template.Node):
             return u''
 
 
+def _get_user(value):
+    if isinstance(value, User):
+        return value
+    elif hasattr(value, 'user') and isinstance(value.user, User):
+        return value.user
+    else:
+        raise ValueError
+
+
+@register.filter
+def blocked_by(value, arg):
+    try:
+        user = _get_user(value)
+    except ValueError:
+        raise template.TemplateSyntaxError('blocked_by filter can only be ' \
+                                           'applied to User\'s or objects ' \
+                                           'with a `user` attribute.')
+    try:
+        target = _get_user(arg)
+    except ValueError:
+        raise template.TemplateSyntaxError('blocked_by filter\'s argument ' \
+                                           'must be a User or an object ' \
+                                           'with a `user` attribute.')
+    if UserBlocks.objects.filter(user=target, blocks=user).count():
+        return True
+    else:
+        return False
+
+
 @register.tag
 def block_user(parser, token):
     bits = token.split_contents()
@@ -110,30 +123,17 @@ class BlockUserLinkNode(template.Node):
             return u''
 
 
-def _get_user(value):
-    if isinstance(value, User):
-        return value
-    elif hasattr(value, 'user') and isinstance(value.user, User):
-        return value.user
-    else:
-        raise ValueError
+@register.tag
+def friends_of(parser, token):
+    tag_name, user_var = token.split_contents()
+    return FriendsOfNode(user_var)
 
 
-@register.filter
-def blocked_by(value, arg):
-    try:
-        user = _get_user(value)
-    except ValueError:
-        raise template.TemplateSyntaxError('blocked_by filter can only be ' \
-                                           'applied to User\'s or objects ' \
-                                           'with a `user` attribute.')
-    try:
-        target = _get_user(arg)
-    except ValueError:
-        raise template.TemplateSyntaxError('blocked_by filter\'s argument ' \
-                                           'must be a User or an object ' \
-                                           'with a `user` attribute.')
-    if UserBlocks.objects.filter(user=target, blocks=user).count():
-        return True
-    else:
-        return False
+class FriendsOfNode(template.Node):
+    def __init__(self, user_var):
+        self.user_var = template.Variable(user_var)
+
+    def render(self, context):
+        user = self.user_var.resolve(context)
+        context.update({'friends': Friendship.objects.friends_of(user, True)})
+        return u''
