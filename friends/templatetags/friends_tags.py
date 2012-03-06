@@ -62,6 +62,23 @@ def _get_user(value):
 
 
 @register.filter
+def is_friends_with(value, arg):
+    try:
+        user = _get_user(value)
+    except ValueError:
+        raise template.TemplateSyntaxError('is_friends_with filter can only be ' \
+                                           'applied to User\'s or objects ' \
+                                           'with a `user` attribute.')
+    try:
+        target = _get_user(arg)
+    except ValueError:
+        raise template.TemplateSyntaxError('is_friends_with filter\'s argument ' \
+                                           'must be a User or an object ' \
+                                           'with a `user` attribute.')
+    return Friendship.objects.are_friends(user, target)
+
+
+@register.filter
 def blocked_by(value, arg):
     try:
         user = _get_user(value)
