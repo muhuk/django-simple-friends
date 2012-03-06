@@ -45,11 +45,11 @@ class FriendshipRequest(models.Model):
         signals.friendship_accepted.send(sender=self)
 
     def decline(self):
-        signals.friendship_declined.send(sender=self, cancelled=False)
+        signals.friendship_declined.send(sender=self)
         self.delete()
 
     def cancel(self):
-        signals.friendship_declined.send(sender=self, cancelled=True)
+        signals.friendship_cancelled.send(sender=self)
         self.delete()
 
 

@@ -4,7 +4,10 @@ from django.dispatch import Signal
 friendship_accepted = Signal()
 
 
-friendship_declined = Signal(providing_args=['cancelled'])
+friendship_declined = Signal()
+
+
+friendship_cancelled = Signal()
 
 
 def create_friendship_instance(sender, instance, created, raw, **kwargs):
