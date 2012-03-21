@@ -1,6 +1,4 @@
 """
-.. autofunction:: friend_list
-
 .. autofunction:: friendship_request
 
 .. autofunction:: friendship_accept
@@ -19,53 +17,12 @@
 from django.http import HttpResponseBadRequest, Http404
 from django.db import transaction
 from django.views.generic.base import RedirectView
-from django.views.generic.list_detail import object_list
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from models import FriendshipRequest, Friendship, UserBlocks
+from models import FriendshipRequest, Friendship
 from app_settings import REDIRECT_FALLBACK_TO_PROFILE
-
-
-@login_required
-def friend_list(request,
-                username=None,
-                paginate_by=None,
-                page=None,
-                allow_empty=True,
-                template_name='friends/friends_list.html',
-                extra_context=None,
-                template_object_name='friends'):
-    if username:
-        user = get_object_or_404(User, username=username)
-    else:
-        user = request.user
-    friends = Friendship.objects.friends_of(user)
-    if extra_context is None:
-        extra_context = {}
-    incoming_requests = FriendshipRequest.objects.filter(
-                                         to_user=request.user, accepted=False)
-    outgoing_requests = FriendshipRequest.objects.filter(
-                                       from_user=request.user, accepted=False)
-    extra_context['target_user'] = user
-    extra_context['friendship_requests'] = {'incoming': incoming_requests,
-                                            'outgoing': outgoing_requests}
-    try:
-        user_blocks = request.user.user_blocks
-    except UserBlocks.DoesNotExist:
-        extra_context['user_blocks'] = []
-    else:
-        extra_context['user_blocks'] = user_blocks.blocks.all()
-
-    return object_list(request,
-                       queryset=friends,
-                       paginate_by=paginate_by,
-                       page=page,
-                       allow_empty=allow_empty,
-                       template_name=template_name,
-                       extra_context=extra_context,
-                       template_object_name=template_object_name)
 
 
 class BaseFriendshipActionView(RedirectView):

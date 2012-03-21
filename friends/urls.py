@@ -1,13 +1,8 @@
-from django.conf.urls.defaults import *
+from django.conf.urls.defaults import patterns, url
 
 
-urlpatterns = patterns('friends.views',
-    url(r'^$',
-        'friend_list',
-        name='friends_home'),
-    url(r'^list/(?P<username>[\+\w\.@-_]+)/$',
-        'friend_list',
-        name='friend_list'),
+urlpatterns = patterns(
+    'friends.views',
     url(r'^add/(?P<username>[\+\w\.@-_]+)/$',
         'friendship_request',
         name='friendship_request'),
