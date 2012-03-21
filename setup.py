@@ -1,4 +1,4 @@
-import os
+import os, sys
 from distutils.core import setup
 from django.core.management.commands.compilemessages import compile_messages
 from friends import __version__, __maintainer__, __email__
@@ -7,7 +7,11 @@ from friends import __version__, __maintainer__, __email__
 def compile_translations():
     curdir = os.getcwdu()
     os.chdir(os.path.join(os.path.dirname(__file__), 'friends'))
-    compile_messages()
+    try:
+        compile_messages(stderr=sys.stderr)
+    except TypeError:
+        # compile_messages doesn't accept stderr parameter prior to 1.2.4
+        compile_messages()
     os.chdir(curdir)
 compile_translations()
 
