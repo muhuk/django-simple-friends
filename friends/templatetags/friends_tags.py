@@ -74,6 +74,14 @@ def add_to_friends(parser, token):
     return AddToFriendsNode(*bits)
 
 
+def blocks(value):
+    user = _get_user_from_value('friends', value)
+    return {
+        'applied': UserBlocks.objects.filter(user=user),
+        'received': UserBlocks.objects.filter(blocks=user),
+    }
+
+
 def block_user(parser, token):
     bits = token.split_contents()
     tag_name, bits = bits[0], bits[1:]
@@ -95,6 +103,14 @@ def block_user(parser, token):
 def friends_(value):
     user = _get_user_from_value('friends', value)
     return Friendship.objects.friends_of(user)
+
+
+def friendship_requests(value):
+    user = _get_user_from_value('friends', value)
+    return {
+        'sent': FriendshipRequest.objects.filter(from_user=user),
+        'received': FriendshipRequest.objects.filter(to_user=user),
+    }
 
 
 def is_blocked_by(value, arg):
@@ -136,7 +152,9 @@ def _get_user_from_value(filter_name, value):
         raise template.TemplateSyntaxError(message)
 
 
+register.filter('blocks', blocks)
 register.filter('friends', friends_)
+register.filter('friendshiprequests', friendship_requests)
 register.filter('isblockedby', is_blocked_by)
 register.filter('isfriendswith', is_friends_with)
 register.tag('addtofriends', add_to_friends)
