@@ -93,44 +93,19 @@ def block_user(parser, token):
 
 
 def friends_(value):
-    try:
-        user = _get_user(value)
-    except ValueError:
-        raise template.TemplateSyntaxError('friends filter can only be ' \
-                                           'applied to User\'s or objects ' \
-                                           'with a `user` attribute.')
+    user = _get_user_from_value('friends', value)
     return Friendship.objects.friends_of(user)
 
 
 def is_blocked_by(value, arg):
-    try:
-        user = _get_user(value)
-    except ValueError:
-        raise template.TemplateSyntaxError('isblockedby filter can only be ' \
-                                           'applied to User\'s or objects ' \
-                                           'with a `user` attribute.')
-    try:
-        target = _get_user(arg)
-    except ValueError:
-        raise template.TemplateSyntaxError('isblockedby filter\'s argument ' \
-                                           'must be a User or an object ' \
-                                           'with a `user` attribute.')
+    user = _get_user_from_value('isblockedby', value)
+    target = _get_user_from_argument('isblockedby', arg)
     return UserBlocks.objects.filter(user=target, blocks=user).exists()
 
 
 def is_friends_with(value, arg):
-    try:
-        user = _get_user(value)
-    except ValueError:
-        raise template.TemplateSyntaxError('isfriendswith filter can only ' \
-                                           'be applied to User\'s or ' \
-                                           'objects with a `user` attribute.')
-    try:
-        target = _get_user(arg)
-    except ValueError:
-        raise template.TemplateSyntaxError('isfriendswith filter\'s ' \
-                                           'argument must be a User or an ' \
-                                           'object with a `user` attribute.')
+    user = _get_user_from_value('isfriendswith', value)
+    target = _get_user_from_argument('isfriendswith', arg)
     return Friendship.objects.are_friends(user, target)
 
 
@@ -141,6 +116,24 @@ def _get_user(value):
         return value.user
     else:
         raise ValueError
+
+
+def _get_user_from_argument(filter_name, arg):
+    try:
+        return _get_user(arg)
+    except ValueError:
+        message = '%s filter\'s argument must be a User or ' \
+                  'an object with a `user` attribute.' % filter_name
+        raise template.TemplateSyntaxError(message)
+
+
+def _get_user_from_value(filter_name, value):
+    try:
+        return _get_user(value)
+    except ValueError:
+        message = '%s filter can only be applied to User\'s or ' \
+                  'objects with a `user` attribute.' % filter_name
+        raise template.TemplateSyntaxError(message)
 
 
 register.filter('friends', friends_)
