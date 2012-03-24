@@ -66,7 +66,6 @@ class FriendsOfNode(template.Node):
         return u''
 
 
-@register.tag
 def add_to_friends(parser, token):
     bits = token.split_contents()
     tag_name, bits = bits[0], bits[1:]
@@ -85,7 +84,6 @@ def add_to_friends(parser, token):
     return AddToFriendsNode(*bits)
 
 
-@register.filter
 def blocked_by(value, arg):
     try:
         user = _get_user(value)
@@ -105,7 +103,6 @@ def blocked_by(value, arg):
         return False
 
 
-@register.tag
 def block_user(parser, token):
     bits = token.split_contents()
     tag_name, bits = bits[0], bits[1:]
@@ -124,26 +121,24 @@ def block_user(parser, token):
     return BlockUserLinkNode(*bits)
 
 
-@register.tag
 def friends_of(parser, token):
     tag_name, user_var = token.split_contents()
     return FriendsOfNode(user_var)
 
 
-@register.filter
 def is_friends_with(value, arg):
     try:
         user = _get_user(value)
     except ValueError:
-        raise template.TemplateSyntaxError('is_friends_with filter can only be ' \
-                                           'applied to User\'s or objects ' \
-                                           'with a `user` attribute.')
+        raise template.TemplateSyntaxError('is_friends_with filter can only ' \
+                                           'be applied to User\'s or ' \
+                                           'objects with a `user` attribute.')
     try:
         target = _get_user(arg)
     except ValueError:
-        raise template.TemplateSyntaxError('is_friends_with filter\'s argument ' \
-                                           'must be a User or an object ' \
-                                           'with a `user` attribute.')
+        raise template.TemplateSyntaxError('is_friends_with filter\'s ' \
+                                           'argument must be a User or an ' \
+                                           'object with a `user` attribute.')
     return Friendship.objects.are_friends(user, target)
 
 
@@ -154,3 +149,10 @@ def _get_user(value):
         return value.user
     else:
         raise ValueError
+
+
+register.filter(blocked_by)
+register.filter(is_friends_with)
+register.tag(add_to_friends)
+register.tag(block_user)
+register.tag(friends_of)
