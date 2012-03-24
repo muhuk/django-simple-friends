@@ -56,16 +56,6 @@ class BlockUserLinkNode(template.Node):
             return u''
 
 
-class FriendsOfNode(template.Node):
-    def __init__(self, user_var):
-        self.user_var = template.Variable(user_var)
-
-    def render(self, context):
-        user = self.user_var.resolve(context)
-        context.update({'friends': Friendship.objects.friends_of(user, True)})
-        return u''
-
-
 def add_to_friends(parser, token):
     bits = token.split_contents()
     tag_name, bits = bits[0], bits[1:]
@@ -102,9 +92,14 @@ def block_user(parser, token):
     return BlockUserLinkNode(*bits)
 
 
-def friends_of(parser, token):
-    tag_name, user_var = token.split_contents()
-    return FriendsOfNode(user_var)
+def friends_(value):
+    try:
+        user = _get_user(value)
+    except ValueError:
+        raise template.TemplateSyntaxError('friends filter can only be ' \
+                                           'applied to User\'s or objects ' \
+                                           'with a `user` attribute.')
+    return Friendship.objects.friends_of(user)
 
 
 def is_blocked_by(value, arg):
@@ -148,8 +143,8 @@ def _get_user(value):
         raise ValueError
 
 
+register.filter('friends', friends_)
 register.filter('isblockedby', is_blocked_by)
 register.filter('isfriendswith', is_friends_with)
 register.tag('addtofriends', add_to_friends)
 register.tag('blockuser', block_user)
-register.tag('friendsof', friends_of)
