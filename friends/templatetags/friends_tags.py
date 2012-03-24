@@ -77,8 +77,8 @@ def add_to_friends(parser, token):
 def blocks(value):
     user = _get_user_from_value('friends', value)
     return {
-        'applied': UserBlocks.objects.filter(user=user),
-        'received': UserBlocks.objects.filter(blocks=user),
+        'applied': User.objects.filter(blocked_by_set__user=user),
+        'received': User.objects.filter(user_blocks__blocks=user),
     }
 
 

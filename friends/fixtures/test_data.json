@@ -118,7 +118,7 @@
     "pk": 1,
     "model": "friends.userblocks",
     "fields": {
-      "blocks": [],
+      "blocks": [4],
       "user": 1
     }
   },
@@ -126,7 +126,7 @@
     "pk": 2,
     "model": "friends.userblocks",
     "fields": {
-      "blocks": [],
+      "blocks": [4],
       "user": 2
     }
   },
@@ -142,7 +142,7 @@
     "pk": 4,
     "model": "friends.userblocks",
     "fields": {
-      "blocks": [],
+      "blocks": [1, 3],
       "user": 4
     }
   }
