@@ -79,12 +79,12 @@ class FriendshipRequestsFilterTestCase(BaseTestCase):
         FriendshipRequest.objects.create(from_user=self.user4,
                                          to_user=self.user1)
         result = friends_tags.friendship_requests(self.user1)
-        # result['sent'] shouldn't contain user2 because they're already friends_
-        # result = {
-        #     'sent': [user3],
-        #     'received': [user4],
-        # }
-        raise AssertionError
+        # result['sent'] shouldn't contain user2 because they
+        # are already friends.
+        result = {
+            'sent': [self.user3],
+            'received': [self.user4],
+        }
 
 
 class FriendshipViewsTestCase(BaseTestCase):
