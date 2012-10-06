@@ -1,4 +1,40 @@
 """
+Views
+=====
+
+.. _class-based-views:
+
+Class Based Views
+-----------------
+
+All the views are implemented as
+`classes <https://docs.djangoproject.com/en/dev/topics/class-based-views/>`_
+but :ref:`view functions <view-functions>` are also provided.
+
+.. autoclass:: BaseFriendshipActionView
+
+.. autoclass:: FriendshipAcceptView
+
+.. autoclass:: FriendshipBlockView
+
+.. autoclass:: FriendshipCancelView
+
+.. autoclass:: FriendshipDeclineView
+
+.. autoclass:: FriendshipDeleteView
+
+.. autoclass:: FriendshipRequestView
+
+.. autoclass:: FriendshipUnblockView
+
+
+.. _view-functions:
+
+View Functions
+--------------
+
+.. tip:: If you want to customize the views provided, check out :ref:`class-based-views` first.
+
 .. autofunction:: friendship_request
 
 .. autofunction:: friendship_accept

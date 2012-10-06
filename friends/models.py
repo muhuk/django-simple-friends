@@ -1,4 +1,7 @@
 """
+Models
+======
+
 .. autoclass:: FriendshipRequest
     :members:
 
