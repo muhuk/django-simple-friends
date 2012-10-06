@@ -1,10 +1,6 @@
 **django-simple-friends** adds friendship management to your project.
 
 
-|Flattr Button|_
-
-
-
 Features
 ========
 
@@ -89,7 +85,3 @@ See Also
 ========
 
 -  `django-friends <http://github.com/jtauber/django-friends>`_
-
-
-.. |Flattr Button| image:: http://api.flattr.com/button/flattr-badge-large.png
-.. _Flattr Button: https://flattr.com/submit/auto?user_id=muhuk&url=https://github.com/muhuk/django-simple-friends&title=django-simple-friends&language=&tags=github&category=software
