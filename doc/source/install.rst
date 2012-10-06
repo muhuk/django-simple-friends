@@ -50,7 +50,8 @@ If you want to develop *django-simple-friends* you can follow the steps below to
     . bin/activate
     git clone git@github.com:muhuk/django-simple-friends.git src
 
-   Of course you will need to replace `muhuk` with your GitHub username in the command above.
+   .. warning::
+       You need to replace `muhuk` with your GitHub username in the command above.
 
 #. Run the tests to make sure everyting is set up correctly::
 
