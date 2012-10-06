@@ -1,16 +1,18 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# django-simple-friends Turkish Translations.
+# Copyright (C) 2012
+# This file is distributed under the same license as the django-simple-friends
+# package.
+# Atamert Ölçgen <muhuk@muhuk.com>, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: django-simple-friends\n"
+"Project-Id-Version: django-simple-friends 0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-13 09:49-0500\n"
+"POT-Creation-Date: 2012-10-06 21:09+0800\n"
 "PO-Revision-Date: 2009-10-13 18:00+0200\n"
 "Last-Translator: Atamert Ölçgen <muhuk@muhuk.com>\n"
-"Language-Team: muhuk <muhuk@muhuk.com>\n"
+"Language-Team: Turkish <muhuk@muhuk.com>\n"
+"Language: Turkish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,131 +22,104 @@ msgstr ""
 msgid "Accept selected friendship requests"
 msgstr "Seçilen arkadaşlık taleplerini kabul et"
 
-#: admin.py:22
+#: admin.py:21
 msgid "Decline selected friendship requests"
 msgstr "Seçilen arkadaşlık taleplerini reddet"
 
-#: admin.py:29
+#: admin.py:27
 msgid "Cancel selected friendship requests"
 msgstr "Seçilen arkadaşlık taleplerini iptal et"
 
-#: models.py:18
+#: models.py:35
 msgid "friendship request"
 msgstr "arkadaşlık talebi"
 
-#: models.py:19
+#: models.py:36
 msgid "friendship requests"
 msgstr "arkadaşlık talepleri"
 
-#: models.py:23
+#: models.py:40
 #, python-format
 msgid "%(from_user)s wants to be friends with %(to_user)s"
 msgstr "%(from_user)s,  %(to_user)s ile arkadaş olmak istiyor"
 
-#: models.py:68
+#: models.py:96
 msgid "friendship"
 msgstr "arkadaşlık"
 
-#: models.py:69
+#: models.py:97
 msgid "friendships"
 msgstr "arkadaşlıklar"
 
-#: models.py:72
+#: models.py:100
 #, python-format
 msgid "%(user)s's friends"
 msgstr "%(user)s kullanıcısının arkadaşlıkları"
 
-#: models.py:77
+#: models.py:104
 msgid "Friends count"
 msgstr "Arkadaş sayısı"
 
-#: models.py:85
+#: models.py:110
 msgid "Summary of friends"
 msgstr "Arkadaşların özeti"
 
-#: models.py:93
+#: models.py:118
 msgid "user blocks"
 msgstr "engellemeler"
 
-#: models.py:96
+#: models.py:121
 #, python-format
 msgid "Users blocked by %(user)s"
 msgstr "%(user)s tarafından engellenenler"
 
-#: models.py:101
+#: models.py:125
 msgid "Blocks count"
 msgstr "Engelleme sayısı"
 
-#: models.py:109
+#: models.py:131
 msgid "Summary of blocks"
 msgstr "Engellemelerin özeti"
 
-#: views.py:17
+#: views.py:83
 msgid "You can't befriend yourself."
 msgstr "Kendi kendinizi arkadaş olarak ekleyemezsiniz."
 
-#: views.py:45
-#, python-format
-msgid "You are already friends with %(user)s"
-msgstr "%(user)s ile zaten arkadaşsınız."
+#~ msgid "You are already friends with %(user)s"
+#~ msgstr "%(user)s ile zaten arkadaşsınız."
 
-#: views.py:105
-#, python-format
-msgid "You already have an active friend invitation for %(user)s."
-msgstr "%(user)s için zaten bir arkadaşlık talebiniz var."
+#~ msgid "You already have an active friend invitation for %(user)s."
+#~ msgstr "%(user)s için zaten bir arkadaşlık talebiniz var."
 
-#: views.py:108
-#, python-format
-msgid "You have requested to be friends with %(user)s."
-msgstr "%(user)s ile arkadaş olmayı talep ettiniz."
+#~ msgid "You have requested to be friends with %(user)s."
+#~ msgstr "%(user)s ile arkadaş olmayı talep ettiniz."
 
-#: views.py:128
-#, python-format
-msgid "You are now friends with %(user)s."
-msgstr "Artık %(user)s ile arkadaşsınız."
+#~ msgid "You are now friends with %(user)s."
+#~ msgstr "Artık %(user)s ile arkadaşsınız."
 
-#: views.py:145
-#, python-format
-msgid "You declined friendship request of %(user)s."
-msgstr "%(user)s kullanıcısının arkadaşlık talebini reddettiniz."
+#~ msgid "You declined friendship request of %(user)s."
+#~ msgstr "%(user)s kullanıcısının arkadaşlık talebini reddettiniz."
 
-#: views.py:148
-#, python-format
-msgid "%(user)s has declined your friendship request."
-msgstr "%(user)s sizin arkadaşlık talebinizi reddetti."
+#~ msgid "%(user)s has declined your friendship request."
+#~ msgstr "%(user)s sizin arkadaşlık talebinizi reddetti."
 
-#: views.py:163
-#, python-format
-msgid "You cancelled your request to be friends with %(user)s."
-msgstr "%(user)s için arkadaşlık talebinizi iptal ettiniz."
+#~ msgid "You cancelled your request to be friends with %(user)s."
+#~ msgstr "%(user)s için arkadaşlık talebinizi iptal ettiniz."
 
-#: views.py:179
-#, python-format
-msgid "You are no longer friends with %(user)s."
-msgstr "Artık %(user)s ile arkadaş değilsiniz."
+#~ msgid "You are no longer friends with %(user)s."
+#~ msgstr "Artık %(user)s ile arkadaş değilsiniz."
 
-#: views.py:182
-#, python-format
-msgid "%(user)s has removed you as a friend."
-msgstr "%(user)s sizi arkadaşlıktan çıkardı."
+#~ msgid "%(user)s has removed you as a friend."
+#~ msgstr "%(user)s sizi arkadaşlıktan çıkardı."
 
-#: views.py:197
-#, python-format
-msgid "You have blocked %(user)s."
-msgstr "%(user)s kullanıcısını engellediniz."
+#~ msgid "You have blocked %(user)s."
+#~ msgstr "%(user)s kullanıcısını engellediniz."
 
-#: views.py:199
-#, python-format
-msgid "%(user)s is already blocked."
-msgstr "%(user)s zaten engelleniyor."
+#~ msgid "%(user)s is already blocked."
+#~ msgstr "%(user)s zaten engelleniyor."
 
-#: views.py:213
-#, python-format
-msgid "%(user)s was not blocked."
-msgstr "%(user)s zaten engellenmiyordu."
+#~ msgid "%(user)s was not blocked."
+#~ msgstr "%(user)s zaten engellenmiyordu."
 
-#: views.py:216
-#, python-format
-msgid "You have unblocked %(user)s."
-msgstr "%(user)s için engellemeyi kaldırdınız."
-
+#~ msgid "You have unblocked %(user)s."
+#~ msgstr "%(user)s için engellemeyi kaldırdınız."
