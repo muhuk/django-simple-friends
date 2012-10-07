@@ -9,6 +9,7 @@ Contents:
 
    about
    install
+   changelog
    modules
 
 
