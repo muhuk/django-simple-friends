@@ -34,7 +34,8 @@ setup_environ(settings)
 # Run syncdb to create tables, this avoids tag fields complaining
 # about django_content_type table
 from django.core.management.commands.syncdb import Command as SyncdbCommand
-SyncdbCommand().execute(verbosity=0)
+from django.db import DEFAULT_DB_ALIAS
+SyncdbCommand().execute(verbosity=0, database=DEFAULT_DB_ALIAS)
 
 
 # If extensions (or modules to document with autodoc) are in another directory,
