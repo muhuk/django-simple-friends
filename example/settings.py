@@ -56,8 +56,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django.contrib.admin',
-    # 'django.contrib.admindocs',
     'friends',
     'django_coverage',
 )
@@ -79,6 +77,8 @@ LOGGING = {
         },
     }
 }
+
+SITE_ID = 1
 
 COVERAGE_USE_CACHE = True
 COVERAGE_PATH_EXCLUDES = ["fixtures", "locale"]
