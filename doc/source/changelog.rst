@@ -2,6 +2,15 @@
 Changes
 =======
 
+Version 1.0.0 - In Development
+==============================
+
+* ``related_name``\ 's for the ``ForeignKey``\ 's to ``User`` from
+  ``FriendshipRequest`` are changed as ``friendshiprequests_from`` and
+  ``friendshiprequests_to``. Please replace any references to
+  ``invitations_from`` and ``invitations_to`` in your code.
+
+
 Version 0.5 - Oct 7, 2012
 =========================
 

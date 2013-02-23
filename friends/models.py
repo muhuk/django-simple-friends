@@ -24,8 +24,8 @@ import signals
 
 
 class FriendshipRequest(models.Model):
-    from_user = models.ForeignKey(User, related_name="invitations_from")
-    to_user = models.ForeignKey(User, related_name="invitations_to")
+    from_user = models.ForeignKey(User, related_name="friendshiprequests_from")
+    to_user = models.ForeignKey(User, related_name="friendshiprequests_to")
     message = models.CharField(max_length=200, blank=True)
     created = models.DateTimeField(default=datetime.datetime.now,
                                    editable=False)
