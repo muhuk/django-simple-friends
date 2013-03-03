@@ -11,7 +11,8 @@ All the views are implemented as
 `classes <https://docs.djangoproject.com/en/dev/topics/class-based-views/>`_
 but :ref:`view functions <view-functions>` are also provided.
 
-.. autoclass:: BaseFriendshipActionView
+.. autoclass:: BaseActionView
+    :members:
 
 .. autoclass:: FriendshipAcceptView
 
@@ -61,11 +62,45 @@ from models import FriendshipRequest, Friendship
 from app_settings import REDIRECT_FALLBACK_TO_PROFILE
 
 
-class BaseFriendshipActionView(RedirectView):
+class BaseActionView(RedirectView):
+    """
+    Base class for action views.
+    """
+
     http_method_names = ['get', 'post']
     permanent = False
 
+    def action(request, user, *args, **kwargs):
+        raise NotImplementedError("Subclasses must implement action()")
+
+    def get(self, request, username, *args, **kwargs):
+        if request.user.username == username:
+            return HttpResponseBadRequest(ugettext(u'You can\'t befriend ' \
+                                                   u'yourself.'))
+        user = get_object_or_404(User, username=username)
+        self.action(request, user, *args, **kwargs)
+        self.set_url(request, **kwargs)
+        return super(BaseActionView, self).get(request, **kwargs)
+
     def set_url(self, request, **kwargs):
+        """
+        Set the ``url`` attribute so that it can be used when
+        :py:meth:`~django.views.generic.base.RedirectView.get_redirect_url` is
+        called.
+
+        ``url`` is determined using the following methods, in order:
+
+        - It can be set in the urlconf using ``redirect_to`` keyword argument.
+        - If ``redirect_to_param`` keyword argument is set in urlconf, the
+          request parameter with that name will be used. In this case the
+          request parameter **must** be provided in runtime.
+        - If the request has ``redirect_to`` to parameter is present, its
+          value will be used.
+        - If ``REDIRECT_FALLBACK_TO_PROFILE`` setting is ``True``, current
+          user's profile URL will be used.
+        - ``HTTP_REFERER`` header's value will be used if exists.
+        - If all else fail, ``'/'`` will be used.
+        """
         if 'redirect_to' in kwargs:
             self.url = kwargs['redirect_to']
         elif 'redirect_to_param' in kwargs and \
@@ -78,17 +113,8 @@ class BaseFriendshipActionView(RedirectView):
         else:
             self.url = request.META.get('HTTP_REFERER', '/')
 
-    def get(self, request, username, *args, **kwargs):
-        if request.user.username == username:
-            return HttpResponseBadRequest(ugettext(u'You can\'t befriend ' \
-                                                   u'yourself.'))
-        user = get_object_or_404(User, username=username)
-        self.action(request, user, *args, **kwargs)
-        self.set_url(request, **kwargs)
-        return super(BaseFriendshipActionView, self).get(request, **kwargs)
 
-
-class FriendshipAcceptView(BaseFriendshipActionView):
+class FriendshipAcceptView(BaseActionView):
     @transaction.commit_on_success
     def accept_friendship(self, from_user, to_user):
         get_object_or_404(FriendshipRequest,
@@ -117,31 +143,31 @@ class FriendshipRequestView(FriendshipAcceptView):
                                              message=request_message)
 
 
-class FriendshipDeclineView(BaseFriendshipActionView):
+class FriendshipDeclineView(BaseActionView):
     def action(self, request, user, **kwargs):
         get_object_or_404(FriendshipRequest,
                           from_user=user,
                           to_user=request.user).decline()
 
 
-class FriendshipCancelView(BaseFriendshipActionView):
+class FriendshipCancelView(BaseActionView):
     def action(self, request, user, **kwargs):
         get_object_or_404(FriendshipRequest,
                           from_user=request.user,
                           to_user=user).cancel()
 
 
-class FriendshipDeleteView(BaseFriendshipActionView):
+class FriendshipDeleteView(BaseActionView):
     def action(self, request, user, **kwargs):
         Friendship.objects.unfriend(request.user, user)
 
 
-class FriendshipBlockView(BaseFriendshipActionView):
+class FriendshipBlockView(BaseActionView):
     def action(self, request, user, **kwargs):
         request.user.user_blocks.blocks.add(user)
 
 
-class FriendshipUnblockView(BaseFriendshipActionView):
+class FriendshipUnblockView(BaseActionView):
     def action(self, request, user, **kwargs):
         request.user.user_blocks.blocks.remove(user)
 
