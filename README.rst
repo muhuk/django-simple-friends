@@ -81,7 +81,17 @@ Getting all friends of a user
     friends = Friendship.objects.friends_of(user1).values_list('id', flat=True)
 
 
+Support
+=======
+
+You can get community support at the |mailing-list|_.
+
+
 See Also
 ========
 
 -  `django-friends <http://github.com/jtauber/django-friends>`_
+
+
+.. |mailing-list| replace:: mailing list
+.. _mailing-list: https://groups.google.com/forum/?fromgroups=#!forum/django-simple-friends

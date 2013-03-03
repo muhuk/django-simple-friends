@@ -5,6 +5,14 @@ Changes
 Version 1.0.0 - In Development
 ==============================
 
+* Some view classes are renamed::
+
+      BaseFriendshipActionView  ->  BaseActionView
+      FriendshipBlockView       ->  UserBlockView
+      FriendshipUnblockView     ->  UserUnblockView
+
+  If you are using only the view functions or the provided ``urls.py``, then
+  you don't need to change your code.
 * ``related_name``\ 's for the ``ForeignKey``\ 's to ``User`` from
   ``FriendshipRequest`` are changed as ``friendshiprequests_from`` and
   ``friendshiprequests_to``. Please replace any references to
