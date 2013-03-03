@@ -16,7 +16,7 @@ but :ref:`view functions <view-functions>` are also provided.
 
 .. autoclass:: FriendshipAcceptView
 
-.. autoclass:: FriendshipBlockView
+.. autoclass:: UserBlockView
 
 .. autoclass:: FriendshipCancelView
 
@@ -162,7 +162,7 @@ class FriendshipDeleteView(BaseActionView):
         Friendship.objects.unfriend(request.user, user)
 
 
-class FriendshipBlockView(BaseActionView):
+class UserBlockView(BaseActionView):
     def action(self, request, user, **kwargs):
         request.user.user_blocks.blocks.add(user)
 
@@ -177,5 +177,5 @@ friendship_accept = login_required(FriendshipAcceptView.as_view())
 friendship_decline = login_required(FriendshipDeclineView.as_view())
 friendship_cancel = login_required(FriendshipCancelView.as_view())
 friendship_delete = login_required(FriendshipDeleteView.as_view())
-user_block = login_required(FriendshipBlockView.as_view())
+user_block = login_required(UserBlockView.as_view())
 user_unblock = login_required(FriendshipUnblockView.as_view())
