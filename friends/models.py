@@ -24,12 +24,53 @@ import signals
 
 
 class FriendshipRequest(models.Model):
+    """
+    An intent to create a friendship between two users.
+
+    .. seealso::
+        There should never be complementary :class:`FriendshipRequest`\ 's,
+        as in ``user1`` requests to be friends with ``user2`` when ``user2``
+        has been requested to be friends with ``user1``. See how
+        :class:`~friends.views.FriendshipRequestView` checks the existence of
+        a :class:`FriendshipRequest` from `to_user` to `from_user`.
+    """
+
     from_user = models.ForeignKey(User, related_name="friendshiprequests_from")
+    """
+    :class:`~django.db.models.ForeignKey` to
+    :class:`~django.contrib.auth.models.User` who initiated the request.
+    """
+
     to_user = models.ForeignKey(User, related_name="friendshiprequests_to")
+    """
+    :class:`~django.db.models.ForeignKey` to
+    :class:`~django.contrib.auth.models.User` the request has been sent.
+    """
+
     message = models.CharField(max_length=200, blank=True)
+    """
+    :class:`~django.db.models.CharField` containing the optional message.
+
+    .. note::
+        ``__unicode__()`` method of this class **does not** print out this
+        field. You must explicitly access this field to output the message.
+
+    Although :mod:`django-simple-friends <friends>` doesn't provide any
+    functionality to use markup engines to render this message it doesn't
+    prevent you to store and render it in any format you desire.
+    """
+
     created = models.DateTimeField(default=datetime.datetime.now,
                                    editable=False)
+    """
+    :class:`~django.db.models.DateTimeField` set when the object is created.
+    """
+
     accepted = models.BooleanField(default=False)
+    """
+    :class:`~django.db.models.BooleanField` indicates whether the request is
+    accepted or still pending.
+    """
 
     class Meta:
         verbose_name = _(u'friendship request')
@@ -42,16 +83,43 @@ class FriendshipRequest(models.Model):
                      'to_user': unicode(self.to_user)}
 
     def accept(self):
+        """
+        Create the :class:`~friends.models.Friendship` between
+        :attr:`~friends.models.FriendshipRequest.from_user` and
+        :attr:`~friends.models.FriendshipRequest.to_user` and mark this instance
+        as accepted.
+
+        :obj:`~friends.signals.friendship_accepted` is signalled on success.
+
+        .. seealso::
+            :class:`~friends.views.FriendshipAcceptView`
+        """
         Friendship.objects.befriend(self.from_user, self.to_user)
         self.accepted = True
         self.save()
         signals.friendship_accepted.send(sender=self)
 
     def decline(self):
+        """
+        Deletes this :class:`~friends.models.FriendshipRequest`
+
+        :obj:`~friends.signals.friendship_declined` is signalled on success.
+
+        .. seealso::
+            :class:`~friends.views.FriendshipDeclineView`
+        """
         signals.friendship_declined.send(sender=self)
         self.delete()
 
     def cancel(self):
+        """
+        Deletes this :class:`~friends.models.FriendshipRequest`
+
+        :obj:`~friends.signals.friendship_cancelled` is signalled on success.
+
+        .. seealso::
+            :class:`~friends.views.FriendshipCancelView`
+        """
         signals.friendship_cancelled.send(sender=self)
         self.delete()
 
