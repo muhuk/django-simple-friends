@@ -28,6 +28,7 @@ class FriendshipRequest(models.Model):
     An intent to create a friendship between two users.
 
     .. seealso::
+
         There should never be complementary :class:`FriendshipRequest`\ 's,
         as in ``user1`` requests to be friends with ``user2`` when ``user2``
         has been requested to be friends with ``user1``. See how
@@ -52,6 +53,7 @@ class FriendshipRequest(models.Model):
     :class:`~django.db.models.CharField` containing the optional message.
 
     .. note::
+
         ``__unicode__()`` method of this class **does not** print out this
         field. You must explicitly access this field to output the message.
 
@@ -92,6 +94,7 @@ class FriendshipRequest(models.Model):
         :obj:`~friends.signals.friendship_accepted` is signalled on success.
 
         .. seealso::
+
             :class:`~friends.views.FriendshipAcceptView`
         """
         Friendship.objects.befriend(self.from_user, self.to_user)
@@ -106,6 +109,7 @@ class FriendshipRequest(models.Model):
         :obj:`~friends.signals.friendship_declined` is signalled on success.
 
         .. seealso::
+
             :class:`~friends.views.FriendshipDeclineView`
         """
         signals.friendship_declined.send(sender=self)
@@ -118,6 +122,7 @@ class FriendshipRequest(models.Model):
         :obj:`~friends.signals.friendship_cancelled` is signalled on success.
 
         .. seealso::
+
             :class:`~friends.views.FriendshipCancelView`
         """
         signals.friendship_cancelled.send(sender=self)
@@ -132,7 +137,7 @@ class FriendshipManager(models.Manager):
         :param user: User to query friends.
         :type user: :class:`~django.contrib.auth.models.User`
         :param shuffle: Optional. Default ``False``.
-        :type shuffle: :ref:`boolean <python:bltin-boolean-values>`
+        :type shuffle: :obj:`bool <types.BooleanType>`
         :returns: :class:`~django.db.models.query.QuerySet` containing friends
                   of ``user``.
         """
@@ -149,7 +154,7 @@ class FriendshipManager(models.Manager):
         :type user1: :class:`~django.contrib.auth.models.User`
         :param user2: User to compare with ``user1``.
         :type user2: :class:`~django.contrib.auth.models.User`
-        :rtype: :ref:`boolean <python:bltin-boolean-values>`
+        :rtype: :obj:`bool <types.BooleanType>`
         """
         return bool(Friendship.objects.get(user=user1).friends.filter(
                                                           user=user2).exists())
@@ -159,6 +164,7 @@ class FriendshipManager(models.Manager):
         Establish friendship between ``user1`` and ``user2``.
 
         .. important::
+
             Instead of calling this method directly,
             :func:`FriendshipRequest.accept()
             <friends.models.FriendshipRequest.accept>`, which calls
