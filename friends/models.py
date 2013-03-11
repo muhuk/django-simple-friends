@@ -126,16 +126,49 @@ class FriendshipRequest(models.Model):
 
 class FriendshipManager(models.Manager):
     def friends_of(self, user, shuffle=False):
+        """
+        List friends of ``user``.
+
+        :param user: User to query friends.
+        :type user: :class:`~django.contrib.auth.models.User`
+        :param shuffle: Optional. Default ``False``.
+        :type shuffle: :ref:`boolean <python:bltin-boolean-values>`
+        :returns: :class:`~django.db.models.query.QuerySet` containing friends
+                  of ``user``.
+        """
         qs = User.objects.filter(friendship__friends__user=user)
         if shuffle:
             qs = qs.order_by('?')
         return qs
 
     def are_friends(self, user1, user2):
+        """
+        Indicate if ``user1`` and ``user2`` are friends.
+
+        :param user1: User to compare with ``user2``.
+        :type user1: :class:`~django.contrib.auth.models.User`
+        :param user2: User to compare with ``user1``.
+        :type user2: :class:`~django.contrib.auth.models.User`
+        :rtype: :ref:`boolean <python:bltin-boolean-values>`
+        """
         return bool(Friendship.objects.get(user=user1).friends.filter(
                                                           user=user2).exists())
 
     def befriend(self, user1, user2):
+        """
+        Establish friendship between ``user1`` and ``user2``.
+
+        .. important::
+            Instead of calling this method directly,
+            :func:`FriendshipRequest.accept()
+            <friends.models.FriendshipRequest.accept>`, which calls
+            this method, should be used.
+
+        :param user1: User to make friends with ``user2``.
+        :type user1: :class:`~django.contrib.auth.models.User`
+        :param user2: User to make friends with ``user1``.
+        :type user2: :class:`~django.contrib.auth.models.User`
+        """
         Friendship.objects.get(user=user1).friends.add(
                                            Friendship.objects.get(user=user2))
         # Now that user1 accepted user2's friend request we should delete any
@@ -144,6 +177,14 @@ class FriendshipManager(models.Manager):
                                          to_user=user2).delete()
 
     def unfriend(self, user1, user2):
+        """
+        Break friendship between ``user1`` and ``user2``.
+
+        :param user1: User to unfriend with ``user2``.
+        :type user1: :class:`~django.contrib.auth.models.User`
+        :param user2: User to unfriend with ``user1``.
+        :type user2: :class:`~django.contrib.auth.models.User`
+        """
         # Break friendship link between users
         Friendship.objects.get(user=user1).friends.remove(
                                            Friendship.objects.get(user=user2))

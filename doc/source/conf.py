@@ -273,4 +273,5 @@ texinfo_documents = [
 
 intersphinx_mapping = {
   'django': ('http://docs.djangoproject.com/en/dev/', 'http://docs.djangoproject.com/en/dev/_objects/'),
+  'python': ('http://docs.python.org/', None),
 }
