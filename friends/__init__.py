@@ -1,5 +1,5 @@
 __author__ = u'Atamert \xd6l\xe7gen'
-__copyright__ = u'Copyright 2009, \xd6l\xe7gen Bili\u015fim'
+__copyright__ = u'Copyright 2013, Atamert \xd6l\xe7gen'
 __credits__ = [u'Atamert \xd6l\xe7gen']
 
 
