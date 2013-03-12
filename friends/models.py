@@ -264,8 +264,22 @@ class Friendship(models.Model):
 
 
 class UserBlocks(models.Model):
+    """
+    :class:`~django.contrib.auth.models.User`\ 's blocked
+    by :attr:`~friends.models.UserBlocks.user`.
+    """
+
     user = models.OneToOneField(User, related_name='user_blocks')
+    """
+    :class:`~django.db.models.OneToOneField` to
+    :class:`~django.contrib.auth.models.User` whose blocks are stored.
+    """
+
     blocks = models.ManyToManyField(User, related_name='blocked_by_set')
+    """
+    :class:`~django.db.models.ManyToManyField` to
+    containing blocked :class:`~django.contrib.auth.models.User`\ 's.
+    """
 
     class Meta:
         verbose_name = verbose_name_plural = _(u'user blocks')
@@ -274,10 +288,25 @@ class UserBlocks(models.Model):
         return _(u'Users blocked by %(user)s') % {'user': unicode(self.user)}
 
     def block_count(self):
+        """
+        Return the count of :attr:`~friends.models.UserBlocks.blocks`.
+        This method is used in :class:`~friends.admin.UserBlocksAdmin`.
+
+        :rtype: |int|
+        """
         return self.blocks.count()
     block_count.short_description = _(u'Blocks count')
 
     def block_summary(self, count=7):
+        """
+        Return a string representation of
+        :attr:`~friends.models.UserBlocks.blocks`.
+        This method is used in :class:`~friends.admin.UserBlocksAdmin`.
+
+        :param |int| count: Maximum number of blocked users to include in
+                            the output.
+        :rtype: |unicode|
+        """
         block_list = self.blocks.all()[:count]
         return u'[%s%s]' % (u', '.join(unicode(user) for user in block_list),
                             u', ...' if self.block_count() > count else u'')
