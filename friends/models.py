@@ -13,6 +13,10 @@ Models
 
 .. autoclass:: UserBlocks
     :members:
+
+.. |bool| replace:: :func:`bool <bool>`
+.. |int| replace:: :func:`int <int>`
+.. |unicode| replace:: :func:`unicode <unicode>`
 """
 
 
@@ -137,7 +141,7 @@ class FriendshipManager(models.Manager):
         :param user: User to query friends.
         :type user: :class:`~django.contrib.auth.models.User`
         :param shuffle: Optional. Default ``False``.
-        :type shuffle: :obj:`bool <types.BooleanType>`
+        :type shuffle: |bool|
         :returns: :class:`~django.db.models.query.QuerySet` containing friends
                   of ``user``.
         """
@@ -154,7 +158,7 @@ class FriendshipManager(models.Manager):
         :type user1: :class:`~django.contrib.auth.models.User`
         :param user2: User to compare with ``user1``.
         :type user2: :class:`~django.contrib.auth.models.User`
-        :rtype: :obj:`bool <types.BooleanType>`
+        :rtype: |bool|
         """
         return bool(Friendship.objects.get(user=user1).friends.filter(
                                                           user=user2).exists())
@@ -202,8 +206,28 @@ class FriendshipManager(models.Manager):
 
 
 class Friendship(models.Model):
+    """
+    Represents the network of friendships.
+    """
+
     user = models.OneToOneField(User, related_name='friendship')
+    """
+    :class:`~django.db.models.OneToOneField` to
+    :class:`~django.contrib.auth.models.User` whose friends are stored.
+    """
+
     friends = models.ManyToManyField('self', symmetrical=True)
+    """
+    Symmetrical :class:`~django.db.models.ManyToManyField` to
+    :class:`~friends.models.Friendship`.
+
+    .. seealso::
+
+        To obtain friends as a list of
+        :class:`~django.contrib.auth.models.User`\ 's use
+        :meth:`FriendshipManager.friends_of()
+        <friends.models.FriendshipManager.friends_of>`.
+    """
 
     objects = FriendshipManager()
 
@@ -215,10 +239,24 @@ class Friendship(models.Model):
         return _(u'%(user)s\'s friends') % {'user': unicode(self.user)}
 
     def friend_count(self):
+        """
+        Return the count of :attr:`~friends.models.Friendship.friends`.
+        This method is used in :class:`~friends.admin.FriendshipAdmin`.
+
+        :rtype: |int|
+        """
         return self.friends.count()
     friend_count.short_description = _(u'Friends count')
 
     def friend_summary(self, count=7):
+        """
+        Return a string representation of
+        :attr:`~friends.models.Friendship.friends`.
+        This method is used in :class:`~friends.admin.FriendshipAdmin`.
+
+        :param |int| count: Maximum number of friends to include in the output.
+        :rtype: |unicode|
+        """
         friend_list = self.friends.all().select_related(depth=1)[:count]
         return u'[%s%s]' % (u', '.join(unicode(f.user) for f in friend_list),
                             u', ...' if self.friend_count() > count else u'')
