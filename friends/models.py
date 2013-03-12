@@ -16,6 +16,8 @@ Models
 
 .. |bool| replace:: :func:`bool <bool>`
 .. |int| replace:: :func:`int <int>`
+.. |ManyToManyField| replace:: :class:`~django.db.models.ManyToManyField`
+.. |User| replace:: :class:`~django.contrib.auth.models.User`
 .. |unicode| replace:: :func:`unicode <unicode>`
 """
 
@@ -37,19 +39,17 @@ class FriendshipRequest(models.Model):
         as in ``user1`` requests to be friends with ``user2`` when ``user2``
         has been requested to be friends with ``user1``. See how
         :class:`~friends.views.FriendshipRequestView` checks the existence of
-        a :class:`FriendshipRequest` from `to_user` to `from_user`.
+        a :class:`FriendshipRequest` from ``to_user`` to ``from_user``.
     """
 
     from_user = models.ForeignKey(User, related_name="friendshiprequests_from")
     """
-    :class:`~django.db.models.ForeignKey` to
-    :class:`~django.contrib.auth.models.User` who initiated the request.
+    :class:`~django.db.models.ForeignKey` to |User| who initiated the request.
     """
 
     to_user = models.ForeignKey(User, related_name="friendshiprequests_to")
     """
-    :class:`~django.db.models.ForeignKey` to
-    :class:`~django.contrib.auth.models.User` the request has been sent.
+    :class:`~django.db.models.ForeignKey` to |User| the request has been sent.
     """
 
     message = models.CharField(max_length=200, blank=True)
@@ -90,9 +90,9 @@ class FriendshipRequest(models.Model):
 
     def accept(self):
         """
-        Create the :class:`~friends.models.Friendship` between
-        :attr:`~friends.models.FriendshipRequest.from_user` and
-        :attr:`~friends.models.FriendshipRequest.to_user` and mark this instance
+        Create the :class:`Friendship` between
+        :attr:`~FriendshipRequest.from_user` and
+        :attr:`~FriendshipRequest.to_user` and mark this instance
         as accepted.
 
         :obj:`~friends.signals.friendship_accepted` is signalled on success.
@@ -108,7 +108,7 @@ class FriendshipRequest(models.Model):
 
     def decline(self):
         """
-        Deletes this :class:`~friends.models.FriendshipRequest`
+        Deletes this :class:`FriendshipRequest`
 
         :obj:`~friends.signals.friendship_declined` is signalled on success.
 
@@ -121,7 +121,7 @@ class FriendshipRequest(models.Model):
 
     def cancel(self):
         """
-        Deletes this :class:`~friends.models.FriendshipRequest`
+        Deletes this :class:`FriendshipRequest`
 
         :obj:`~friends.signals.friendship_cancelled` is signalled on success.
 
@@ -139,7 +139,7 @@ class FriendshipManager(models.Manager):
         List friends of ``user``.
 
         :param user: User to query friends.
-        :type user: :class:`~django.contrib.auth.models.User`
+        :type user: |User|
         :param shuffle: Optional. Default ``False``.
         :type shuffle: |bool|
         :returns: :class:`~django.db.models.query.QuerySet` containing friends
@@ -155,9 +155,9 @@ class FriendshipManager(models.Manager):
         Indicate if ``user1`` and ``user2`` are friends.
 
         :param user1: User to compare with ``user2``.
-        :type user1: :class:`~django.contrib.auth.models.User`
+        :type user1: |User|
         :param user2: User to compare with ``user1``.
-        :type user2: :class:`~django.contrib.auth.models.User`
+        :type user2: |User|
         :rtype: |bool|
         """
         return bool(Friendship.objects.get(user=user1).friends.filter(
@@ -175,9 +175,9 @@ class FriendshipManager(models.Manager):
             this method, should be used.
 
         :param user1: User to make friends with ``user2``.
-        :type user1: :class:`~django.contrib.auth.models.User`
+        :type user1: |User|
         :param user2: User to make friends with ``user1``.
-        :type user2: :class:`~django.contrib.auth.models.User`
+        :type user2: |User|
         """
         Friendship.objects.get(user=user1).friends.add(
                                            Friendship.objects.get(user=user2))
@@ -191,9 +191,9 @@ class FriendshipManager(models.Manager):
         Break friendship between ``user1`` and ``user2``.
 
         :param user1: User to unfriend with ``user2``.
-        :type user1: :class:`~django.contrib.auth.models.User`
+        :type user1: |User|
         :param user2: User to unfriend with ``user1``.
-        :type user2: :class:`~django.contrib.auth.models.User`
+        :type user2: |User|
         """
         # Break friendship link between users
         Friendship.objects.get(user=user1).friends.remove(
@@ -212,19 +212,16 @@ class Friendship(models.Model):
 
     user = models.OneToOneField(User, related_name='friendship')
     """
-    :class:`~django.db.models.OneToOneField` to
-    :class:`~django.contrib.auth.models.User` whose friends are stored.
+    :class:`~django.db.models.OneToOneField` to |User| whose friends are stored.
     """
 
     friends = models.ManyToManyField('self', symmetrical=True)
     """
-    Symmetrical :class:`~django.db.models.ManyToManyField` to
-    :class:`~friends.models.Friendship`.
+    Symmetrical |ManyToManyField| to :class:`Friendship`.
 
     .. seealso::
 
-        To obtain friends as a list of
-        :class:`~django.contrib.auth.models.User`\ 's use
+        To obtain friends as a list of |User|'s use
         :meth:`FriendshipManager.friends_of()
         <friends.models.FriendshipManager.friends_of>`.
     """
@@ -240,7 +237,7 @@ class Friendship(models.Model):
 
     def friend_count(self):
         """
-        Return the count of :attr:`~friends.models.Friendship.friends`.
+        Return the count of :attr:`~Friendship.friends`.
         This method is used in :class:`~friends.admin.FriendshipAdmin`.
 
         :rtype: |int|
@@ -251,7 +248,7 @@ class Friendship(models.Model):
     def friend_summary(self, count=7):
         """
         Return a string representation of
-        :attr:`~friends.models.Friendship.friends`.
+        :attr:`~Friendship.friends`.
         This method is used in :class:`~friends.admin.FriendshipAdmin`.
 
         :param |int| count: Maximum number of friends to include in the output.
@@ -265,20 +262,17 @@ class Friendship(models.Model):
 
 class UserBlocks(models.Model):
     """
-    :class:`~django.contrib.auth.models.User`\ 's blocked
-    by :attr:`~friends.models.UserBlocks.user`.
+    |User|'s blocked by :attr:`~UserBlocks.user`.
     """
 
     user = models.OneToOneField(User, related_name='user_blocks')
     """
-    :class:`~django.db.models.OneToOneField` to
-    :class:`~django.contrib.auth.models.User` whose blocks are stored.
+    :class:`~django.db.models.OneToOneField` to |User| whose blocks are stored.
     """
 
     blocks = models.ManyToManyField(User, related_name='blocked_by_set')
     """
-    :class:`~django.db.models.ManyToManyField` to
-    containing blocked :class:`~django.contrib.auth.models.User`\ 's.
+    |ManyToManyField| to containing blocked |User|'s.
     """
 
     class Meta:
@@ -289,7 +283,7 @@ class UserBlocks(models.Model):
 
     def block_count(self):
         """
-        Return the count of :attr:`~friends.models.UserBlocks.blocks`.
+        Return the count of :attr:`~UserBlocks.blocks`.
         This method is used in :class:`~friends.admin.UserBlocksAdmin`.
 
         :rtype: |int|
@@ -300,7 +294,7 @@ class UserBlocks(models.Model):
     def block_summary(self, count=7):
         """
         Return a string representation of
-        :attr:`~friends.models.UserBlocks.blocks`.
+        :attr:`~UserBlocks.blocks`.
         This method is used in :class:`~friends.admin.UserBlocksAdmin`.
 
         :param |int| count: Maximum number of blocked users to include in
