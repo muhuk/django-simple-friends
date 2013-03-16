@@ -17,6 +17,7 @@ Models
 .. |bool| replace:: :func:`bool <bool>`
 .. |int| replace:: :func:`int <int>`
 .. |ManyToManyField| replace:: :class:`~django.db.models.ManyToManyField`
+.. |OneToOneField| replace:: :class:`~django.db.models.OneToOneField`
 .. |User| replace:: :class:`~django.contrib.auth.models.User`
 .. |unicode| replace:: :func:`unicode <unicode>`
 """
@@ -84,9 +85,10 @@ class FriendshipRequest(models.Model):
         unique_together = (('to_user', 'from_user'),)
 
     def __unicode__(self):
-        return _(u'%(from_user)s wants to be friends with %(to_user)s') % \
-                    {'from_user': unicode(self.from_user),
-                     'to_user': unicode(self.to_user)}
+        return _(u'%(from_user)s wants to be friends with %(to_user)s') % {
+            'from_user': unicode(self.from_user),
+            'to_user': unicode(self.to_user),
+        }
 
     def accept(self):
         """
@@ -160,8 +162,8 @@ class FriendshipManager(models.Manager):
         :type user2: |User|
         :rtype: |bool|
         """
-        return bool(Friendship.objects.get(user=user1).friends.filter(
-                                                          user=user2).exists())
+        friendship = Friendship.objects.get(user=user1)
+        return bool(friendship.friends.filter(user=user2).exists())
 
     def befriend(self, user1, user2):
         """
@@ -179,8 +181,8 @@ class FriendshipManager(models.Manager):
         :param user2: User to make friends with ``user1``.
         :type user2: |User|
         """
-        Friendship.objects.get(user=user1).friends.add(
-                                           Friendship.objects.get(user=user2))
+        friendship = Friendship.objects.get(user=user1)
+        friendship.friends.add(Friendship.objects.get(user=user2))
         # Now that user1 accepted user2's friend request we should delete any
         # request by user1 to user2 so that we don't have ambiguous data
         FriendshipRequest.objects.filter(from_user=user1,
@@ -196,8 +198,8 @@ class FriendshipManager(models.Manager):
         :type user2: |User|
         """
         # Break friendship link between users
-        Friendship.objects.get(user=user1).friends.remove(
-                                           Friendship.objects.get(user=user2))
+        friendship = Friendship.objects.get(user=user1)
+        friendship.friends.remove(Friendship.objects.get(user=user2))
         # Delete FriendshipRequest's as well
         FriendshipRequest.objects.filter(from_user=user1,
                                          to_user=user2).delete()
@@ -212,7 +214,7 @@ class Friendship(models.Model):
 
     user = models.OneToOneField(User, related_name='friendship')
     """
-    :class:`~django.db.models.OneToOneField` to |User| whose friends are stored.
+    |OneToOneField| to |User| whose friends are stored.
     """
 
     friends = models.ManyToManyField('self', symmetrical=True)
@@ -267,7 +269,7 @@ class UserBlocks(models.Model):
 
     user = models.OneToOneField(User, related_name='user_blocks')
     """
-    :class:`~django.db.models.OneToOneField` to |User| whose blocks are stored.
+    |OneToOneField| to |User| whose blocks are stored.
     """
 
     blocks = models.ManyToManyField(User, related_name='blocked_by_set')
@@ -308,11 +310,13 @@ class UserBlocks(models.Model):
 
 
 # Signal connections
-models.signals.post_save.connect(signals.create_friendship_instance,
-                                 sender=User,
-                                 dispatch_uid='friends.signals.create_' \
-                                              'friendship_instance')
-models.signals.post_save.connect(signals.create_userblocks_instance,
-                                 sender=User,
-                                 dispatch_uid='friends.signals.create_' \
-                                              'userblocks_instance')
+models.signals.post_save.connect(
+    signals.create_friendship_instance,
+    sender=User,
+    dispatch_uid='friends.signals.create_friendship_instance',
+)
+models.signals.post_save.connect(
+    signals.create_userblocks_instance,
+    sender=User,
+    dispatch_uid='friends.signals.create_userblocks_instance',
+)

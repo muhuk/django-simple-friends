@@ -34,7 +34,10 @@ but :ref:`view functions <view-functions>` are also provided.
 View Functions
 --------------
 
-.. tip:: If you want to customize the views provided, check out :ref:`class-based-views` first.
+.. tip::
+
+    If you want to customize the views provided, check out
+    :ref:`class-based-views` first.
 
 .. autofunction:: friendship_request
 
@@ -75,8 +78,9 @@ class BaseActionView(RedirectView):
 
     def get(self, request, username, *args, **kwargs):
         if request.user.username == username:
-            return HttpResponseBadRequest(ugettext(u'You can\'t befriend ' \
-                                                   u'yourself.'))
+            return HttpResponseBadRequest(
+                ugettext(u'You can\'t befriend yourself.'),
+            )
         user = get_object_or_404(User, username=username)
         self.action(request, user, *args, **kwargs)
         self.set_url(request, **kwargs)
@@ -104,7 +108,7 @@ class BaseActionView(RedirectView):
         if 'redirect_to' in kwargs:
             self.url = kwargs['redirect_to']
         elif 'redirect_to_param' in kwargs and \
-                                kwargs['redirect_to_param'] in request.REQUEST:
+             kwargs['redirect_to_param'] in request.REQUEST:
             self.url = request.REQUEST[kwargs['redirect_to_param']]
         elif 'redirect_to' in request.REQUEST:
             self.url = request.REQUEST['next']
@@ -117,9 +121,11 @@ class BaseActionView(RedirectView):
 class FriendshipAcceptView(BaseActionView):
     @transaction.commit_on_success
     def accept_friendship(self, from_user, to_user):
-        get_object_or_404(FriendshipRequest,
-                          from_user=from_user,
-                          to_user=to_user).accept()
+        get_object_or_404(
+            FriendshipRequest,
+            from_user=from_user,
+            to_user=to_user,
+        ).accept()
 
     def action(self, request, user, **kwargs):
         self.accept_friendship(user, request.user)
@@ -129,8 +135,9 @@ class FriendshipRequestView(FriendshipAcceptView):
     @transaction.commit_on_success
     def action(self, request, user, **kwargs):
         if Friendship.objects.are_friends(request.user, user):
-            raise RuntimeError('%r amd %r are already friends' % \
-                                                          (request.user, user))
+            raise RuntimeError(
+                '%r amd %r are already friends' % (request.user, user),
+            )
         try:
             # If there's a friendship request from the other user accept it.
             self.accept_friendship(user, request.user)
@@ -138,9 +145,11 @@ class FriendshipRequestView(FriendshipAcceptView):
             request_message = request.REQUEST.get('message', u'')
             # If we already have an active friendship request IntegrityError
             # will be raised and the transaction will be rolled back.
-            FriendshipRequest.objects.create(from_user=request.user,
-                                             to_user=user,
-                                             message=request_message)
+            FriendshipRequest.objects.create(
+                from_user=request.user,
+                to_user=user,
+                message=request_message,
+            )
 
 
 class FriendshipDeclineView(BaseActionView):

@@ -12,20 +12,20 @@ class FriendshipRequestAdmin(admin.ModelAdmin):
     def accept_friendship(self, request, queryset):
         for friendship_request in queryset:
             friendship_request.accept()
-    accept_friendship.short_description = _(u'Accept selected friendship ' \
-                                            u'requests')
+    accept_friendship.short_description = \
+        _(u'Accept selected friendship requests')
 
     def decline_friendship(self, request, queryset):
         for friendship_request in queryset:
             friendship_request.decline()
-    decline_friendship.short_description = _(u'Decline selected friendship ' \
-                                             u'requests')
+    decline_friendship.short_description = \
+        _(u'Decline selected friendship requests')
 
     def cancel_friendship(self, request, queryset):
         for friendship_request in queryset:
             friendship_request.cancel()
-    cancel_friendship.short_description = _(u'Cancel selected friendship ' \
-                                            u'requests')
+    cancel_friendship.short_description = \
+        _(u'Cancel selected friendship requests')
 admin.site.register(FriendshipRequest, FriendshipRequestAdmin)
 
 
