@@ -13,13 +13,6 @@ Models
 
 .. autoclass:: UserBlocks
     :members:
-
-.. |bool| replace:: :func:`bool <bool>`
-.. |int| replace:: :func:`int <int>`
-.. |ManyToManyField| replace:: :class:`~django.db.models.ManyToManyField`
-.. |OneToOneField| replace:: :class:`~django.db.models.OneToOneField`
-.. |User| replace:: :class:`~django.contrib.auth.models.User`
-.. |unicode| replace:: :func:`unicode <unicode>`
 """
 
 

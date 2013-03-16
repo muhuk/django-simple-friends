@@ -49,12 +49,6 @@ Signal Handlers
 .. automethod:: friends.signals.create_friendship_instance
 
 .. automethod:: friends.signals.create_userblocks_instance
-
-
-.. |bool| replace:: :func:`bool <bool>`
-.. |FriendshipRequest| replace:: :class:`~friends.models.FriendshipRequest`
-.. |User| replace:: :class:`~django.contrib.auth.models.User`
-.. |UserBlocks| replace:: :class:`~friends.models.UserBlocks`
 """
 
 
