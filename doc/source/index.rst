@@ -10,6 +10,7 @@ Contents:
    about
    install
    changelog
+   guide
    reference
 
 
