@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django-simple-friends 0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-06 21:09+0800\n"
+"POT-Creation-Date: 2013-03-16 22:08+0800\n"
 "PO-Revision-Date: 2009-10-13 18:00+0200\n"
 "Last-Translator: Atamert Ölçgen <muhuk@muhuk.com>\n"
 "Language-Team: Turkish <muhuk@muhuk.com>\n"
@@ -18,70 +18,70 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Turkish\n"
 
-#: admin.py:15
+#: admin.py:16
 msgid "Accept selected friendship requests"
 msgstr "Seçilen arkadaşlık taleplerini kabul et"
 
-#: admin.py:21
+#: admin.py:22
 msgid "Decline selected friendship requests"
 msgstr "Seçilen arkadaşlık taleplerini reddet"
 
-#: admin.py:27
+#: admin.py:28
 msgid "Cancel selected friendship requests"
 msgstr "Seçilen arkadaşlık taleplerini iptal et"
 
-#: models.py:35
+#: models.py:83
 msgid "friendship request"
 msgstr "arkadaşlık talebi"
 
-#: models.py:36
+#: models.py:84
 msgid "friendship requests"
 msgstr "arkadaşlık talepleri"
 
-#: models.py:40
+#: models.py:88
 #, python-format
 msgid "%(from_user)s wants to be friends with %(to_user)s"
 msgstr "%(from_user)s,  %(to_user)s ile arkadaş olmak istiyor"
 
-#: models.py:96
+#: models.py:234
 msgid "friendship"
 msgstr "arkadaşlık"
 
-#: models.py:97
+#: models.py:235
 msgid "friendships"
 msgstr "arkadaşlıklar"
 
-#: models.py:100
+#: models.py:238
 #, python-format
 msgid "%(user)s's friends"
 msgstr "%(user)s kullanıcısının arkadaşlıkları"
 
-#: models.py:104
+#: models.py:248
 msgid "Friends count"
 msgstr "Arkadaş sayısı"
 
-#: models.py:110
+#: models.py:262
 msgid "Summary of friends"
 msgstr "Arkadaşların özeti"
 
-#: models.py:118
+#: models.py:281
 msgid "user blocks"
 msgstr "engellemeler"
 
-#: models.py:121
+#: models.py:284
 #, python-format
 msgid "Users blocked by %(user)s"
 msgstr "%(user)s tarafından engellenenler"
 
-#: models.py:125
+#: models.py:294
 msgid "Blocks count"
 msgstr "Engelleme sayısı"
 
-#: models.py:131
+#: models.py:309
 msgid "Summary of blocks"
 msgstr "Engellemelerin özeti"
 
-#: views.py:83
+#: views.py:82
 msgid "You can't befriend yourself."
 msgstr "Kendi kendinizi arkadaş olarak ekleyemezsiniz."
 

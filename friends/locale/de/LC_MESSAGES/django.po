@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: django-simple-friends 0.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-12 01:23+0100\n"
+"POT-Creation-Date: 2013-03-16 22:08+0800\n"
 "PO-Revision-Date: 2010-03-12 01:23+0100\n"
 "Last-Translator: Jannis Leidel <jannis@leidel.info>\n"
 "Language-Team: German <jannis@leidel.info>\n"
@@ -18,69 +18,69 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: admin.py:15
+#: admin.py:16
 msgid "Accept selected friendship requests"
 msgstr "Ausgewählte Freundschaftsangebote akzeptieren"
 
-#: admin.py:21
+#: admin.py:22
 msgid "Decline selected friendship requests"
 msgstr "Ausgewählte Freundschaftsangebote ablehnen"
 
-#: admin.py:27
+#: admin.py:28
 msgid "Cancel selected friendship requests"
 msgstr "Ausgewählte Freundschaftsangebote zurückziehen"
 
-#: models.py:35
+#: models.py:83
 msgid "friendship request"
 msgstr "Freundschaftsangebot"
 
-#: models.py:36
+#: models.py:84
 msgid "friendship requests"
 msgstr "Freundschaftsangebote"
 
-#: models.py:40
+#: models.py:88
 #, python-format
 msgid "%(from_user)s wants to be friends with %(to_user)s"
 msgstr "%(from_user)s möchte mit %(to_user)s befreundet sein"
 
-#: models.py:96
+#: models.py:234
 msgid "friendship"
 msgstr "Freundschaft"
 
-#: models.py:97
+#: models.py:235
 msgid "friendships"
 msgstr "Freundschaften"
 
-#: models.py:100
+#: models.py:238
 #, python-format
 msgid "%(user)s's friends"
 msgstr " Freunde von %(user)s"
 
-#: models.py:104
+#: models.py:248
 msgid "Friends count"
 msgstr "Anzahl der Freunde"
 
-#: models.py:110
+#: models.py:262
 msgid "Summary of friends"
 msgstr "Freundesliste"
 
-#: models.py:118
+#: models.py:281
 msgid "user blocks"
 msgstr "Benutzer-Blocks"
 
-#: models.py:121
+#: models.py:284
 #, python-format
 msgid "Users blocked by %(user)s"
 msgstr "Benutzer blockiert von %(user)s"
 
-#: models.py:125
+#: models.py:294
 msgid "Blocks count"
 msgstr "Anzahl der Blocks"
 
-#: models.py:131
+#: models.py:309
 msgid "Summary of blocks"
 msgstr "Blocks-Übersicht"
 
-#: views.py:83
+#: views.py:82
 msgid "You can't befriend yourself."
 msgstr "Sie können nicht mit sich selbst befreundet sein."
