@@ -1,6 +1,6 @@
-====================
-Module Documentation
-====================
+=================
+Package Reference
+=================
 
 .. automodule:: friends.views
 

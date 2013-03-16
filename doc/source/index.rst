@@ -10,7 +10,7 @@ Contents:
    about
    install
    changelog
-   modules
+   reference
 
 
 Indices and tables
