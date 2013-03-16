@@ -2,8 +2,8 @@
 Changes
 =======
 
-Version 1.0.0 - In Development
-==============================
+Version 1.0.0 - Mar 16, 2013
+============================
 
 * Some view classes are renamed::
 
