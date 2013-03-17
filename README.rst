@@ -1,6 +1,6 @@
 **django-simple-friends** adds friendship management to your project.
 
-- Read the |documentation|_.
+- Read the documentation_.
 - Get community support at the |mailing-list|_.
 
 
