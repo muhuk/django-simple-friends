@@ -7,18 +7,17 @@ def post_syncdb_handler(sender, app, created_models, verbosity, **kwargs):
     if verbosity >= 1:
         print "Creating Friendship & UserBlocks models for existing users..."
     user_ids = User.objects.values_list('pk', flat=True).order_by('pk')
-    total = user_ids.count()
-    batch_size = 2
-    for start in range(0, total, batch_size):
-        friendships = []
-        user_blocks = []
-        for user_id in user_ids[start:min(start + batch_size, total)]:
-            friendships.append(models.Friendship(user_id=user_id))
-            user_blocks.append(models.UserBlocks(user_id=user_id))
-        models.Friendship.objects.bulk_create(friendships)
-        models.UserBlocks.objects.bulk_create(user_blocks)
-    if verbosity >= 2 and total:
-        print "Created Friendship & UserBlocks for {0} users.".format(total)
+    friendship_total = userblocks_total = 0
+    for user_id in user_ids:
+        obj, created = models.Friendship.objects.get_or_create(user_id=user_id)
+        if created:
+            friendship_total += 1
+        obj, created = models.UserBlocks.objects.get_or_create(user_id=user_id)
+        if created:
+            userblocks_total += 1
+    if verbosity >= 2 or True:
+        print "Created {0} new Friendships & {1} new UserBlocks.".format(
+            friendship_total, userblocks_total)
 
 
 post_syncdb.connect(
