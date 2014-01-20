@@ -4,20 +4,34 @@ import models
 
 
 def post_syncdb_handler(sender, app, created_models, verbosity, **kwargs):
-    if verbosity >= 1:
-        print "Creating Friendship & UserBlocks models for existing users..."
+    friends_model_created = models.Friendship in created_models
+    block_model_created = models.UserBlocks in created_models
+    app_models = []
+    if friends_model_created:
+        app_models.append(models.Friendship)
+    if block_model_created:
+        app_models.append(models.UserBlocks)
+    if not app_models:
+        return
     user_ids = User.objects.values_list('pk', flat=True).order_by('pk')
-    friendship_total = userblocks_total = 0
-    for user_id in user_ids:
-        obj, created = models.Friendship.objects.get_or_create(user_id=user_id)
-        if created:
-            friendship_total += 1
-        obj, created = models.UserBlocks.objects.get_or_create(user_id=user_id)
-        if created:
-            userblocks_total += 1
-    if verbosity >= 2 or True:
-        print "Created {0} new Friendships & {1} new UserBlocks.".format(
-            friendship_total, userblocks_total)
+    for model in app_models:
+        name = model.__name__
+        if verbosity >= 1:
+            print "Creating {0} models for existing users...".format(name)
+        existing_ids = model.objects.values_list('pk', flat=True)
+        # Convert to set for faster lookups: O(1) vs O(n)
+        existing_ids = set(existing_ids)
+        # We only want user IDs that don't have existing Friendship records.
+        # For example, a superuser account created interactively during syncdb
+        # will have a Friendship record due to this app's post_save signal
+        # handler
+        user_ids = [i for i in user_ids if i not in existing_ids]
+        batch = []
+        for user_id in user_ids:
+            batch.append(model(user_id=user_id))
+        model.objects.bulk_create(batch)
+        if verbosity >= 2 or True:
+            print "Created {0} new {1} record(s).".format(len(user_ids), name)
 
 
 post_syncdb.connect(
