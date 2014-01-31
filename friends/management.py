@@ -16,28 +16,26 @@ def post_syncdb_handler(sender, app, created_models, verbosity, **kwargs):
         # UserBlock records. For example, a superuser account created
         # interactively during syncdb will have such a record due to this
         # app's post_save signal handler
-        if model == models.Friendship:
-            kwargs = { 'friendship__isnull': True }
-        else:
-            kwargs = { 'user_blocks__isnull': True }
+        kwargs = {
+            'Friendship': { 'friendship__isnull': True },
+            'UserBlocks': { 'user_blocks__isnull': True }
+        }[name]
         user_ids = User.objects.filter(**kwargs).values_list('pk', flat=True)\
             .order_by('pk')
         # Note: In Django 1.5, a batch_size parameter can be passed directly to
         # bulk_create(). Better to use that parameter instead of the below
         # code once version 1.4 is no longer supported by this app.
-        batch = []
-        count = 0
-        for user_id in user_ids:
-            batch.append(model(user_id=user_id))
-            count += 1
-            if count == FRIENDS_SYNCDB_BATCH_SIZE:
+        total = 0
+        batch_size = FRIENDS_SYNCDB_BATCH_SIZE
+        while True:
+            batch = [model(user_id=id) for id in user_ids[:batch_size]]
+            if batch:
                 model.objects.bulk_create(batch)
-                batch = []
-                count = 0
-        if batch:
-            model.objects.bulk_create(batch)
-        if verbosity >= 2 or True:
-            print "Created {0} new {1} record(s).".format(len(user_ids), name)
+                total += len(batch)
+            else:
+                break
+        if verbosity >= 2 and total:
+            print "Created {0} new {1} record(s).".format(total, name)
 
 
 post_syncdb.connect(
