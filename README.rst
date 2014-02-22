@@ -1,3 +1,6 @@
+
+.. attention:: This package is no longer maintained.
+
 **django-simple-friends** adds friendship management to your project.
 
 - Read the documentation_.
